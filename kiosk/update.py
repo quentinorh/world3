@@ -31,6 +31,14 @@ _KEEP = frozenset({
     "deploy/target.ps1",
 })
 
+# Etapes affichees sur le menu (id, libelle). Les bornes % sont inclusives a gauche.
+STEPS = (
+    ("download", "TÉLÉCHARGEMENT", 0, 60),
+    ("extract", "EXTRACTION", 60, 80),
+    ("install", "INSTALLATION", 80, 95),
+    ("restart", "REDÉMARRAGE", 95, 100),
+)
+
 _lock = threading.Lock()
 _state = {
     "online": False,
@@ -38,6 +46,9 @@ _state = {
     "busy": False,
     "result": None,  # None | "ok" | "fail"
     "detail": "",
+    "step": "",
+    "label": "",
+    "percent": 0,
 }
 _probe_thread: threading.Thread | None = None
 
@@ -58,6 +69,35 @@ def online() -> bool:
 def busy() -> bool:
     with _lock:
         return bool(_state["busy"])
+
+
+def progress():
+    """Etat courant : step, label, percent, busy."""
+    with _lock:
+        return {
+            "step": _state["step"],
+            "label": _state["label"],
+            "percent": int(_state["percent"]),
+            "busy": bool(_state["busy"]),
+        }
+
+
+def set_step(step_id: str, fraction: float = 0.0):
+    """fraction dans [0, 1] a l'interieur de l'etape."""
+    fraction = max(0.0, min(1.0, float(fraction)))
+    for sid, label, lo, hi in STEPS:
+        if sid != step_id:
+            continue
+        percent = lo + (hi - lo) * fraction
+        with _lock:
+            _state["step"] = sid
+            _state["label"] = label
+            _state["percent"] = max(0, min(100, int(round(percent))))
+        return
+    with _lock:
+        _state["step"] = step_id
+        _state["label"] = step_id.upper()
+        _state["percent"] = int(round(100 * fraction))
 
 
 def take_result():
@@ -120,6 +160,9 @@ def start_update(root: Path | None = None):
         _state["busy"] = True
         _state["result"] = None
         _state["detail"] = ""
+        _state["step"] = "download"
+        _state["label"] = "TÉLÉCHARGEMENT"
+        _state["percent"] = 0
     target = Path(root) if root is not None else project_root()
     thread = threading.Thread(
         target=_run_update, args=(target,), name="world3-update", daemon=True,
@@ -131,6 +174,7 @@ def start_update(root: Path | None = None):
 def _run_update(root: Path):
     try:
         apply_update(root)
+        set_step("restart", 0.0)
         with _lock:
             _state["result"] = "ok"
             _state["detail"] = ""
@@ -150,34 +194,66 @@ def apply_update(root: Path):
     with tempfile.TemporaryDirectory(prefix="world3-upd-") as tmp:
         tmp_path = Path(tmp)
         archive = tmp_path / "src.tgz"
+        set_step("download", 0.0)
         _download(url, archive)
+        set_step("download", 1.0)
         extracted = tmp_path / "src"
         extracted.mkdir()
+        set_step("extract", 0.0)
         _safe_extract(archive, extracted)
+        set_step("extract", 1.0)
         source = _archive_root(extracted)
+        set_step("install", 0.0)
         _overlay(source, root)
+        set_step("install", 1.0)
 
 
 def _download(url: str, dest: Path):
     req = urllib.request.Request(url, headers={"User-Agent": _UA})
     with urllib.request.urlopen(req, timeout=120) as resp, open(dest, "wb") as out:
-        shutil.copyfileobj(resp, out)
+        total = resp.headers.get("Content-Length")
+        try:
+            total_n = int(total) if total else 0
+        except ValueError:
+            total_n = 0
+        done = 0
+        last_report = -1
+        while True:
+            chunk = resp.read(64 * 1024)
+            if not chunk:
+                break
+            out.write(chunk)
+            done += len(chunk)
+            if total_n > 0:
+                frac = min(1.0, done / total_n)
+                pct = int(frac * 100)
+                if pct != last_report:
+                    last_report = pct
+                    set_step("download", frac)
+            elif done > 0:
+                # Sans taille : progression douce plafonnee a 90 % de l'etape.
+                soft = min(0.9, done / (8 * 1024 * 1024))
+                set_step("download", soft)
 
 
 def _safe_extract(archive: Path, dest: Path):
     dest = dest.resolve()
     with tarfile.open(archive, "r:gz") as tar:
-        for member in tar.getmembers():
+        members = tar.getmembers()
+        total = max(1, len(members))
+        for index, member in enumerate(members):
             name = member.name.replace("\\", "/")
             if name.startswith("/") or ".." in Path(name).parts:
                 raise RuntimeError(f"archive refusee : {name}")
             target = (dest / name).resolve()
             if not str(target).startswith(str(dest) + os.sep) and target != dest:
                 raise RuntimeError(f"archive refusee : {name}")
-        try:
-            tar.extractall(dest, filter="data")
-        except TypeError:
-            tar.extractall(dest)
+            try:
+                tar.extract(member, dest, filter="data")
+            except TypeError:
+                tar.extract(member, dest)
+            if index == total - 1 or index % 8 == 0:
+                set_step("extract", (index + 1) / total)
 
 
 def _archive_root(extracted: Path) -> Path:
@@ -201,20 +277,22 @@ def kept(rel: Path) -> bool:
 
 
 def _overlay(source: Path, root: Path):
-    for path in source.rglob("*"):
+    files = [path for path in source.rglob("*") if path.is_file()]
+    total = max(1, len(files))
+    for index, path in enumerate(files):
         rel = path.relative_to(source)
         if kept(rel):
             continue
         target = root / rel
-        if path.is_dir():
-            target.mkdir(parents=True, exist_ok=True)
-            continue
         target.parent.mkdir(parents=True, exist_ok=True)
         shutil.copy2(path, target)
+        if index == total - 1 or index % 4 == 0:
+            set_step("install", (index + 1) / total)
 
 
 def restart_kiosk() -> bool:
     """Relance world3.service sur le Pi. Ailleurs : succes sans rien faire."""
+    set_step("restart", 1.0)
     if not on_pi():
         return True
     sudo = shutil.which("sudo")

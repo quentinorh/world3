@@ -11,11 +11,14 @@ from pathlib import Path
 os.environ.setdefault("SDL_VIDEODRIVER", "dummy")
 
 from kiosk.update import (
+    STEPS,
     apply_update,
     archive_url,
     kept,
+    progress,
     project_root,
     repo_slug,
+    set_step,
 )
 
 
@@ -41,6 +44,14 @@ def test_repo_et_garde():
     assert kept(Path("deploy/target.ps1"))
     assert not kept(Path("kiosk/app.py"))
     assert not kept(Path("contenu.json"))
+    assert len(STEPS) == 4
+    set_step("download", 0.5)
+    info = progress()
+    assert info["step"] == "download"
+    assert info["label"] == "TÉLÉCHARGEMENT"
+    assert 25 <= info["percent"] <= 35
+    set_step("install", 1.0)
+    assert progress()["percent"] == 95
 
 
 def test_overlay_conserve_locaux(monkeypatch=None):

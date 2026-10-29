@@ -11,9 +11,11 @@ from device.power import halt_machine
 from device.screen import H, W, open_screen
 from device.widgets import draw_button, plate
 from kiosk.update import (
+    STEPS,
     busy as update_busy,
     ensure_probe,
     online,
+    progress as update_progress,
     restart_kiosk,
     start_update,
     take_result,
@@ -23,7 +25,7 @@ from sp2050.theme import INK as SP_INK
 from sp2050.theme import MUTED as SP_MUTED
 from sp2050.theme import PAPER, VIOLET
 from world3.font import Font
-from world3.theme import BG, GLASS, INK, LINE, MUTED, RUST
+from world3.theme import BG, GLASS, INK, LINE, MUTED, OCHRE, RUST
 
 # Bande du relief. Assez sombre pour l'encre claire, assez bleue
 # pour ne pas se confondre avec WORLD3.
@@ -92,6 +94,7 @@ class Menu:
         self.pixel = Font()
         self.confirm = False
         self.update_ask = False
+        self.updating = False
         self.pressed = None
         self.down = None
         self.toast_until = 0.0
@@ -106,7 +109,7 @@ class Menu:
         clock = pygame.time.Clock()
         while True:
             self.screen.poll()
-            self._poll_update()
+            restart_now = self._poll_update()
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     return "quit"
@@ -116,26 +119,32 @@ class Menu:
                         self.update_ask = False
                         self.pressed = None
                 elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
-                    self._down(self.screen.logical(event.pos))
+                    if not self.updating:
+                        self._down(self.screen.logical(event.pos))
                 elif event.type == pygame.MOUSEBUTTONUP and event.button == 1:
-                    choice = self._up(self.screen.logical(event.pos))
-                    if choice:
-                        return choice
+                    if not self.updating:
+                        choice = self._up(self.screen.logical(event.pos))
+                        if choice:
+                            return choice
             self._draw()
             self.screen.present()
+            if restart_now:
+                if not restart_kiosk():
+                    self.updating = False
+                    self._toast("À JOUR", INK)
             clock.tick(30)
 
     def _poll_update(self):
-        result, _detail = take_result()
+        """True s'il faut relancer le service apres l'affichage de la frame."""
+        result, detail = take_result()
         if result is None:
-            return
+            return False
         self.update_ask = False
         if result == "ok":
-            self._toast("REDÉMARRAGE", INK)
-            if not restart_kiosk():
-                self._toast("À JOUR", INK)
-            return
-        self._toast("ÉCHEC", RUST)
+            return True
+        self.updating = False
+        self._toast(detail.upper()[:24] if detail else "ÉCHEC", RUST)
+        return False
 
     def _toast(self, text, color=RUST, seconds=1.8):
         self.toast_text = text
@@ -194,11 +203,11 @@ class Menu:
         if pressed == "do-update":
             self.update_ask = False
             if start_update():
-                self._toast("TÉLÉCHARGEMENT", INK, seconds=30.0)
+                self.updating = True
             else:
                 self._toast("OCCUPÉ", RUST)
             return None
-        if self.confirm or self.update_ask or update_busy():
+        if self.confirm or self.update_ask or self.updating or update_busy():
             return None
         if pressed == "world3":
             return "world3"
@@ -224,7 +233,7 @@ class Menu:
             if self._off_rect().collidepoint(pos):
                 return "do-update"
             return None
-        if update_busy():
+        if self.updating or update_busy():
             return None
         if self._power_rect().collidepoint(pos):
             return "off"
@@ -257,9 +266,11 @@ class Menu:
         self._draw_carte(surf)
         self._draw_sp(surf)
         self._draw_power(surf)
-        if self._update_visible() or update_busy():
+        if self._update_visible() or self.updating:
             self._draw_update(surf)
-        if self.confirm:
+        if self.updating:
+            self._draw_update_progress(surf)
+        elif self.confirm:
             self._draw_confirm(surf)
         elif self.update_ask:
             self._draw_update_confirm(surf)
@@ -331,8 +342,13 @@ class Menu:
         _power_mark(surf, face)
 
     def _draw_update(self, surf):
-        pressed = self.pressed == "update" and not self.update_ask and not self.confirm
-        face, _color = plate(surf, self._update_rect(), pressed or update_busy())
+        pressed = (
+            self.pressed == "update"
+            and not self.update_ask
+            and not self.confirm
+            and not self.updating
+        )
+        face, _color = plate(surf, self._update_rect(), pressed or self.updating)
         _update_mark(surf, face)
 
     def _draw_confirm(self, surf):
@@ -377,10 +393,52 @@ class Menu:
             self.pressed == "do-update", 2, kind="on",
         )
 
+    def _draw_update_progress(self, surf):
+        surf.blit(self.shade, (0, 0))
+        panel = pygame.Rect(W // 2 - 280, H // 2 - 220, 560, 440)
+        pygame.draw.rect(surf, LINE, panel.move(4, 4))
+        pygame.draw.rect(surf, BG, panel)
+        pygame.draw.rect(surf, INK, panel, 2)
+        info = update_progress()
+        percent = int(info["percent"])
+        current = info["step"]
+        self.pixel.blit(
+            surf, "MISE À JOUR", W // 2, panel.y + 28, 3, INK, align="center",
+        )
+        self.pixel.blit(
+            surf, f"{percent} %", W // 2, panel.y + 72, 4, INK, align="center",
+        )
+        bar = pygame.Rect(panel.x + 40, panel.y + 130, panel.w - 80, 28)
+        pygame.draw.rect(surf, LINE, bar)
+        pygame.draw.rect(surf, BG, bar.inflate(-4, -4))
+        inner = bar.inflate(-8, -8)
+        fill_w = max(0, int(inner.w * percent / 100))
+        if fill_w > 0:
+            pygame.draw.rect(surf, OCHRE, (inner.x, inner.y, fill_w, inner.h))
+        y = panel.y + 180
+        for step_id, label, _lo, _hi in STEPS:
+            if step_id == current:
+                mark, color = ">", INK
+            elif _step_done(step_id, current, percent):
+                mark, color = "+", MUTED
+            else:
+                mark, color = "-", MUTED
+            self.pixel.blit(surf, f"{mark} {label}", panel.x + 48, y, 2, color)
+            y += 40
+
     def _draw_toast(self, surf):
         self.pixel.blit(
             surf, self.toast_text, W // 2, H - 72, 2, self.toast_color, align="center",
         )
+
+
+def _step_done(step_id, current, percent):
+    order = [item[0] for item in STEPS]
+    if current not in order or step_id not in order:
+        return False
+    if order.index(step_id) < order.index(current):
+        return True
+    return step_id == current and percent >= 100
 
 
 def _has_stories():
