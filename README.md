@@ -1,6 +1,6 @@
 # WORLD3
 
-Un kiosque pour penser le futur. Au démarrage, un menu ouvre plusieurs applications sur le même écran. Aujourd'hui : le jeu WORLD3, le globe RELIEF, la carte CARTE et le lecteur SP2050. D'autres suivront.
+Un kiosque pour penser le futur. Au démarrage, un menu ouvre plusieurs applications sur le même écran. Aujourd'hui : le jeu WORLD3, le globe RELIEF, la carte CARTE, le lecteur SP2050 et le jardin JARDIN. D'autres suivront.
 
 Sur un ordinateur, le menu s'ouvre dans une fenêtre. Sur un Raspberry Pi 3 B+, il tient une dalle tactile de 720×720, sans bureau.
 
@@ -20,6 +20,8 @@ python -m carte.fetch
 
 Le fichier, de l'ordre de 4 Go, va dans `var/carte/`. Le Pi ne télécharge pas la planète.
 
+**JARDIN** génère un jardin de plantes imaginaires, fluorescentes, et on y avance lentement. L'axe Y du capteur d'inclinaison regarde à gauche et à droite. `RÉGLAGES` change l'espèce, la graine, les passes, l'angle, la densité, le tropisme et l'heure du ciel, entre l'aube et le couchant.
+
 **SP2050** lit les futurs publics de [sp2050.org/futurs](https://sp2050.org/futurs). S'il y a Internet, les textes et les couvertures sont copiés dans `var/sp2050/` et restent lisibles hors ligne. À la main : `python -m sp2050.sync`.
 
 ## Ordinateur
@@ -31,11 +33,11 @@ python main.py
 
 Fenêtre plus grande : `python main.py --scale 2`.
 
-Une application seule : `python -m world3`, `python -m relief`, `python -m carte`, `python -m sp2050`.
+Une application seule : `python -m world3`, `python -m relief`, `python -m carte`, `python -m sp2050`, `python -m jardin`.
 
 ## Raspberry Pi 3 B+
 
-Écran Waveshare 4inch HDMI LCD (C), 720×720. Système : Raspberry Pi OS Lite 32 bits (Debian Trixie). Pas de bureau : le menu s'affiche en plein écran, directement sur la dalle. La maison ramène au menu. Échap fait de même depuis le globe du jeu, RELIEF et la carte. Un coin du menu éteint le Pi.
+Écran Waveshare 4inch HDMI LCD (C), 720×720. Système : Raspberry Pi OS Lite 32 bits (Debian Trixie). Pas de bureau : le menu s'affiche en plein écran, directement sur la dalle. La maison ramène au menu. Échap fait de même depuis le globe du jeu, RELIEF, la carte et le jardin (dans le jardin, Échap ferme d'abord les réglages). Un coin du menu éteint le Pi.
 
 Depuis Windows, après le premier démarrage du Pi (SSH et Wi-Fi réglés dans Raspberry Pi Imager, nom d'hôte `world3`) :
 
@@ -53,7 +55,7 @@ Sur le Pi, le service `world3` tient l'écran. `sudo systemctl stop world3` le l
 
 Si GitHub répond, un bouton du menu met le kiosque à jour et relance le service. La partie, `var/` et l'environnement Python restent.
 
-Capteur d'inclinaison optionnel (DFRobot BMA220) : VCC sur 3,3 V (pas 5 V), GND, SDA sur GPIO2 (broche 3), SCL sur GPIO3 (broche 5), INT non branché. Le bus I2C est déjà activé par `-Setup`. Diag : `python -m device.accel`. Sur le globe du jeu, l'axe Y du capteur décale le point de vue, sans inertie ni arrêt de la rotation de repos. Le doigt ne tourne qu'à l'horizontal.
+Capteur d'inclinaison optionnel (DFRobot BMA220) : VCC sur 3,3 V (pas 5 V), GND, SDA sur GPIO2 (broche 3), SCL sur GPIO3 (broche 5), INT non branché. Le bus I2C est déjà activé par `-Setup`. Diag : `python -m device.accel`. Sur le globe du jeu, l'axe Y du capteur décale le point de vue, sans inertie ni arrêt de la rotation de repos. Le doigt ne tourne qu'à l'horizontal. Dans le jardin, le même axe regarde à gauche et à droite pendant la marche. Sans capteur, haut et bas du clavier le remplacent.
 
 `-Setup` ajoute aussi un minuteur, `sp2050-sync.timer`, qui reprend les futurs au démarrage et toutes les six heures dès que le réseau est là.
 
@@ -88,4 +90,4 @@ Sons : le jeu les calcule. Clics secs, courts, légers.
 
 La planète du jeu est un dessin. Ses couleurs suivent la nourriture, la pollution, la population et les ressources restantes. Les calottes y sont une carte, pas une température : World3 ne calcule pas le climat.
 
-Le relief vient d'ETOPO1 (NOAA, domaine public). La carte est un extrait OpenStreetMap via Protomaps ; l'écran porte `© OpenStreetMap`. SP2050 reprend les futurs publics de [sp2050.org](https://sp2050.org/futurs).
+Le relief vient d'ETOPO1 (NOAA, domaine public). La carte est un extrait OpenStreetMap via Protomaps ; l'écran porte `© OpenStreetMap`. SP2050 reprend les futurs publics de [sp2050.org](https://sp2050.org/futurs). Le jardin reprend les grammaires de Lindenmayer : une chaîne de symboles, réécrite, puis lue par une tortue dans l'espace.

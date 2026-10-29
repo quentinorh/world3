@@ -5,7 +5,7 @@ import math
 import numpy as np
 import pygame
 
-from device.widgets import draw_home, home_rect
+from device.widgets import corner_hit, draw_home, home_rect
 
 from .anims import REVEAL_DUR, key_for_dilemma, render_anim
 from .content import (
@@ -774,7 +774,7 @@ def draw_icon_button(surf, rect, kind, hits, fn, ident, pressed=False):
         pygame.draw.circle(surf, INK, (cx, cy), 14, 2)
         pygame.draw.rect(surf, INK, (cx - 2, cy - 8, 4, 4))
         pygame.draw.rect(surf, INK, (cx - 2, cy - 1, 4, 9))
-    hits.add(rect, fn, ident)
+    hits.add(corner_hit(rect), fn, ident)
 
 
 _PAGE_PAD_X = 14
@@ -2166,7 +2166,7 @@ def _close_corner(surf, hits, fn, pressed):
 def _home_corner(surf, hits, fn, pressed):
     rect = home_rect()
     draw_home(surf, rect, pressed, ground="dark")
-    hits.add(rect, fn, "home")
+    hits.add(corner_hit(rect), fn, "home")
 
 
 def _labeled_width(font, label, scale, pad_x, min_w):

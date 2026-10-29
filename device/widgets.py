@@ -1,4 +1,4 @@
-"""Boutons du menu, du relief, de la carte et de SP2050.
+"""Boutons du menu, du relief, de la carte, de SP2050 et du jardin.
 
 Meme dessin que ceux du jeu : ombre decalee, cadre de deux pixels,
 face qui s'enfonce. La police est world3.font.
@@ -29,6 +29,15 @@ _HOUSE = (
 
 def home_rect():
     return pygame.Rect(20, 16, HOME, HOME)
+
+
+# Marge invisible autour des petits carres de coin. Le dessin ne change pas.
+CORNER_PAD = 8
+
+
+def corner_hit(rect):
+    """Zone de clic un peu plus large que le carre dessine."""
+    return pygame.Rect(rect).inflate(CORNER_PAD * 2, CORNER_PAD * 2)
 
 
 def menu_rect():

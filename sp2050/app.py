@@ -8,7 +8,7 @@ import re
 import pygame
 
 from device.screen import H, W, open_screen
-from device.widgets import BAR, HOME, draw_button, draw_home
+from device.widgets import BAR, HOME, corner_hit, draw_button, draw_home
 from sp2050.library import catalog_mtime, load_stories
 from sp2050.sync import maybe_start, running
 from sp2050.theme import INK, LINE, MUTED, PAPER
@@ -157,6 +157,12 @@ class Reader:
             return pygame.Rect(_NAV_X, _NAV_Y, HOME, HOME)
         return pygame.Rect(_NAV_X, _NAV_Y, _NAV_BACK, HOME)
 
+    def _back_hit(self):
+        rect = self._back_rect()
+        if self.story is None:
+            return corner_hit(rect)
+        return rect
+
     def _nav_label_y(self, scale):
         """Haut du texte, centré sur la face du bouton, pas sur la barre."""
         return _NAV_Y + (HOME - self.pixel.height(scale)) // 2
@@ -165,7 +171,7 @@ class Reader:
         self.held = pos
         self.drag = 0.0
         self.anchor = self.scroll
-        self.armed = "back" if self._back_rect().collidepoint(pos) else None
+        self.armed = "back" if self._back_hit().collidepoint(pos) else None
 
     def _move(self, pos):
         if self.held is None:
@@ -186,7 +192,7 @@ class Reader:
         if held is None or drag >= 12:
             return None
         if armed == "back":
-            if self._back_rect().collidepoint(pos):
+            if self._back_hit().collidepoint(pos):
                 return self._back() if self.story is not None else "menu"
             return None
         if self.story is None:

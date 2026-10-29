@@ -2,7 +2,7 @@
 
 import pygame
 
-from device.widgets import HOME_LIGHT, draw_button, draw_home
+from device.widgets import CORNER_PAD, HOME_LIGHT, corner_hit, draw_button, draw_home, home_rect
 from world3.font import GLYPHS, Font
 from world3.theme import BG, INK, LINE
 
@@ -78,10 +78,20 @@ def test_dessin():
         pygame.quit()
 
 
+def test_zone_coin():
+    visual = home_rect()
+    zone = corner_hit(visual)
+    assert zone.size == (visual.w + 2 * CORNER_PAD, visual.h + 2 * CORNER_PAD)
+    assert zone.center == visual.center
+    assert zone.collidepoint(visual.x - (CORNER_PAD - 1), visual.centery)
+    assert not zone.collidepoint(visual.x - (CORNER_PAD + 1), visual.centery)
+
+
 def main():
     test_capitales()
     test_minuscules()
     test_dessin()
+    test_zone_coin()
     print("font ok")
 
 

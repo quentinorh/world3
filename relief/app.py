@@ -9,7 +9,7 @@ import numpy as np
 import pygame
 
 from device.screen import H, W, open_screen
-from device.widgets import BAR, draw_button, draw_home, menu_rect, minus_rect, plus_rect
+from device.widgets import BAR, corner_hit, draw_button, draw_home, menu_rect, minus_rect, plus_rect
 from relief.dem import Terrain
 from relief.view import ALT_FAR, clamp_altitude, pan_degrees, render
 from world3.font import Font
@@ -101,7 +101,7 @@ class GlobeApp:
         self.anchor = pos
         self.last = pos
         self.moved = False
-        if self._menu_rect().collidepoint(pos):
+        if corner_hit(self._menu_rect()).collidepoint(pos):
             self.mode = "menu"
         elif self._plus_rect().collidepoint(pos):
             self.mode = "plus"
@@ -129,7 +129,7 @@ class GlobeApp:
         moved = self.moved
         self.mode = None
         self.anchor = None
-        if mode == "menu" and not moved and self._menu_rect().collidepoint(pos):
+        if mode == "menu" and not moved and corner_hit(self._menu_rect()).collidepoint(pos):
             return "menu"
         if mode == "plus" and not moved and self._plus_rect().collidepoint(pos):
             self._zoom(1.35)

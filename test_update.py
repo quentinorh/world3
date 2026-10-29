@@ -141,6 +141,10 @@ def test_bouton_menu():
         assert menu._update_visible()
         assert menu._update_rect().right == 720 - 20
         assert menu._hit((menu._update_rect().centerx, menu._update_rect().centery)) == "update"
+        # Quelques pixels autour du carre, sans changer le dessin.
+        beside = (menu._update_rect().right + 4, menu._update_rect().centery)
+        assert menu._hit(beside) == "update"
+        assert menu._hit((menu._power_rect().x - 4, menu._power_rect().centery)) == "off"
         with upd._lock:
             upd._state["online"] = False
         assert not menu._update_visible()

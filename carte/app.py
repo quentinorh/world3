@@ -28,7 +28,7 @@ from carte.view import (
     tiles_in_view,
 )
 from device.screen import H, W, open_screen
-from device.widgets import draw_button, draw_home, menu_rect, minus_rect, plus_rect
+from device.widgets import corner_hit, draw_button, draw_home, menu_rect, minus_rect, plus_rect
 from world3.font import Font
 
 _CACHE = 64
@@ -147,7 +147,7 @@ class MapApp:
         self.anchor = pos
         self.last = pos
         self.moved = False
-        if self._menu_rect().collidepoint(pos):
+        if corner_hit(self._menu_rect()).collidepoint(pos):
             self.mode = "menu"
         elif self.archive is not None and self._plus_rect().collidepoint(pos):
             self.mode = "plus"
@@ -178,7 +178,7 @@ class MapApp:
         self.mode = None
         self.drag = False
         self.anchor = None
-        if mode == "menu" and not moved and self._menu_rect().collidepoint(pos):
+        if mode == "menu" and not moved and corner_hit(self._menu_rect()).collidepoint(pos):
             return "menu"
         if self.archive is None:
             return None

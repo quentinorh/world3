@@ -1,4 +1,4 @@
-"""Quatre choix au demarrage : WORLD3, RELIEF, CARTE, SP2050."""
+"""Cinq choix au demarrage : WORLD3, RELIEF, CARTE, SP2050, JARDIN."""
 
 from __future__ import annotations
 
@@ -9,7 +9,7 @@ import pygame
 
 from device.power import halt_machine
 from device.screen import H, W, open_screen
-from device.widgets import draw_button, plate
+from device.widgets import corner_hit, draw_button, plate
 from kiosk.update import (
     STEPS,
     busy as update_busy,
@@ -34,10 +34,18 @@ _RELIEF = (16, 42, 50)
 _CARTE = (214, 206, 188)
 _CARTE_INK = (36, 32, 28)
 _CARTE_MUTED = (110, 96, 78)
+# Nuit fluo, distincte du noir chaud de WORLD3.
+_JARDIN = (18, 6, 24)
+_JARDIN_INK = (120, 255, 214)
+_JARDIN_MUTED = (255, 96, 176)
+_TITLE = 6
+_SUB = 2
 
 
 def main(argv=None):
-    parser = argparse.ArgumentParser(description="Choisir WORLD3, RELIEF, CARTE ou SP2050.")
+    parser = argparse.ArgumentParser(
+        description="Choisir WORLD3, RELIEF, CARTE, SP2050 ou JARDIN.",
+    )
     parser.add_argument("--fullscreen", action="store_true")
     parser.add_argument("--scale", type=int, default=1)
     args = parser.parse_args(argv)
@@ -67,6 +75,12 @@ def main(argv=None):
                 pygame.event.clear()
             elif choice == "sp2050":
                 from sp2050.app import run
+
+                if run(screen) == "quit":
+                    break
+                pygame.event.clear()
+            elif choice == "jardin":
+                from jardin.app import run
 
                 if run(screen) == "quit":
                     break
@@ -102,7 +116,7 @@ class Menu:
         self.toast_color = RUST
         self.shade = pygame.Surface((W, H), pygame.SRCALPHA)
         self.shade.fill((0, 0, 0, 150))
-        self.band = H // 4
+        self.band = H // 5
         ensure_probe()
 
     def loop(self) -> str:
@@ -163,17 +177,25 @@ class Menu:
     def _update_visible(self):
         return online() and not update_busy()
 
+    def _band_rect(self, index):
+        top = index * self.band
+        height = H - top if index == 4 else self.band
+        return pygame.Rect(0, top, W, height)
+
     def _world_rect(self):
-        return pygame.Rect(0, 0, W, self.band)
+        return self._band_rect(0)
 
     def _relief_rect(self):
-        return pygame.Rect(0, self.band, W, self.band)
+        return self._band_rect(1)
 
     def _carte_rect(self):
-        return pygame.Rect(0, 2 * self.band, W, self.band)
+        return self._band_rect(2)
 
     def _sp_rect(self):
-        return pygame.Rect(0, 3 * self.band, W, H - 3 * self.band)
+        return self._band_rect(3)
+
+    def _jardin_rect(self):
+        return self._band_rect(4)
 
     def _down(self, pos):
         self.down = pos
@@ -221,6 +243,8 @@ class Menu:
         if pressed == "sp2050":
             maybe_start(force=not _has_stories())
             return "sp2050"
+        if pressed == "jardin":
+            return "jardin"
         return None
 
     def _hit(self, pos):
@@ -238,9 +262,9 @@ class Menu:
             return None
         if self.updating or update_busy():
             return None
-        if self._power_rect().collidepoint(pos):
+        if corner_hit(self._power_rect()).collidepoint(pos):
             return "off"
-        if self._update_visible() and self._update_rect().collidepoint(pos):
+        if self._update_visible() and corner_hit(self._update_rect()).collidepoint(pos):
             return "update"
         if self._world_rect().collidepoint(pos):
             return "world3"
@@ -250,6 +274,8 @@ class Menu:
             return "carte"
         if self._sp_rect().collidepoint(pos):
             return "sp2050"
+        if self._jardin_rect().collidepoint(pos):
+            return "jardin"
         return None
 
     def _cancel_rect(self):
@@ -264,10 +290,12 @@ class Menu:
         pygame.draw.rect(surf, _RELIEF, self._relief_rect())
         pygame.draw.rect(surf, _CARTE, self._carte_rect())
         pygame.draw.rect(surf, PAPER, self._sp_rect())
+        pygame.draw.rect(surf, _JARDIN, self._jardin_rect())
         self._draw_world(surf)
         self._draw_relief(surf)
         self._draw_carte(surf)
         self._draw_sp(surf)
+        self._draw_jardin(surf)
         self._draw_power(surf)
         if self._update_visible() or self.updating:
             self._draw_update(surf)
@@ -284,8 +312,8 @@ class Menu:
         return (3, 3) if self.pressed == name else (0, 0)
 
     def _band_title(self, surf, band, name, title, sub, title_color, sub_color):
-        title_scale = 8
-        sub_scale = 2
+        title_scale = _TITLE
+        sub_scale = _SUB
         title_h = self.pixel.height(title_scale)
         sub_h = self.pixel.height(sub_scale)
         gap = 14
@@ -317,8 +345,8 @@ class Menu:
     def _draw_sp(self, surf):
         band = self._sp_rect()
         dx, dy = self._shift("sp2050")
-        title_scale = 8
-        sub_scale = 2
+        title_scale = _TITLE
+        sub_scale = _SUB
         title_h = self.pixel.height(title_scale)
         sub_h = self.pixel.height(sub_scale)
         gap = 14
@@ -338,6 +366,12 @@ class Menu:
                 surf, "SYNCHRO", x, y + title_h + gap + sub_h + 18,
                 2, SP_MUTED, align="center",
             )
+
+    def _draw_jardin(self, surf):
+        self._band_title(
+            surf, self._jardin_rect(), "jardin",
+            "JARDIN", "PLANTES D'AILLEURS", _JARDIN_INK, _JARDIN_MUTED,
+        )
 
     def _draw_power(self, surf):
         pressed = self.pressed == "off" and not self.confirm and not self.update_ask
@@ -398,7 +432,14 @@ class Menu:
 
     def _draw_update_progress(self, surf):
         surf.blit(self.shade, (0, 0))
-        panel = pygame.Rect(W // 2 - 280, H // 2 - 220, 560, 440)
+        width = 560
+        # Titre, pourcentage, barre, puis une ligne par étape.
+        step_top = 180
+        line = 40
+        height = step_top + (len(STEPS) - 1) * line + self.pixel.height(2) + 36
+        panel = pygame.Rect(
+            W // 2 - width // 2, H // 2 - height // 2, width, height,
+        )
         pygame.draw.rect(surf, LINE, panel.move(4, 4))
         pygame.draw.rect(surf, BG, panel)
         pygame.draw.rect(surf, INK, panel, 2)
