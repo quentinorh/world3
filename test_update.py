@@ -38,7 +38,8 @@ def _tarball(files: dict[str, bytes], root_name="world3-main") -> bytes:
 
 def test_repo_et_garde():
     assert "/" in repo_slug()
-    assert archive_url().endswith("/main.tar.gz")
+    assert "codeload.github.com" in archive_url()
+    assert archive_url().endswith("/main")
     assert kept(Path("save.json"))
     assert kept(Path("var/carte/terre.pmtiles"))
     assert kept(Path(".venv/bin/python"))
