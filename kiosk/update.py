@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import json
 import os
 import shutil
 import subprocess
@@ -21,6 +22,9 @@ _BRANCH = "main"
 _UA = "WORLD3-kiosk/1.0"
 _PROBE_EVERY = 45.0
 _PROBE_TIMEOUT = 3.0
+# Taille typique de l'archive (dem.npz inclus) pour la barre sans Content-Length.
+_ARCHIVE_HINT = 24 * 1024 * 1024
+_REVISION = ".world3-revision"
 
 # Chemins locaux a ne jamais ecraser ni supprimer lors d'une maj.
 _KEEP = frozenset({
@@ -29,14 +33,13 @@ _KEEP = frozenset({
     ".venv",
     ".git",
     "deploy/target.ps1",
+    _REVISION,
 })
 
 # Etapes affichees sur le menu (id, libelle). Les bornes % sont inclusives a gauche.
-# Telechargement puis une seule passe tar vers le dossier (pas d'extraction
-# Python membre a membre + recopie, trop lente sur SD de Pi 3).
 STEPS = (
-    ("download", "TÉLÉCHARGEMENT", 0, 55),
-    ("extract", "INSTALLATION", 55, 95),
+    ("download", "TÉLÉCHARGEMENT", 0, 70),
+    ("extract", "INSTALLATION", 70, 95),
     ("restart", "REDÉMARRAGE", 95, 100),
 )
 
@@ -45,7 +48,7 @@ _state = {
     "online": False,
     "checked": 0.0,
     "busy": False,
-    "result": None,  # None | "ok" | "fail"
+    "result": None,  # None | "ok" | "same" | "fail"
     "detail": "",
     "step": "",
     "label": "",
@@ -59,7 +62,12 @@ def repo_slug() -> str:
 
 
 def archive_url() -> str:
-    return f"https://github.com/{repo_slug()}/archive/refs/heads/{_BRANCH}.tar.gz"
+    # codeload : evite la redirection github.com et marche mieux avec curl.
+    return f"https://codeload.github.com/{repo_slug()}/tar.gz/refs/heads/{_BRANCH}"
+
+
+def commits_api_url() -> str:
+    return f"https://api.github.com/repos/{repo_slug()}/commits/{_BRANCH}"
 
 
 def online() -> bool:
@@ -102,7 +110,7 @@ def set_step(step_id: str, fraction: float = 0.0):
 
 
 def take_result():
-    """(result, detail) une fois, puis raz. result est 'ok', 'fail' ou None."""
+    """(result, detail) une fois, puis raz. result : 'ok', 'same', 'fail' ou None."""
     with _lock:
         result = _state["result"]
         detail = _state["detail"]
@@ -133,9 +141,11 @@ def _probe_loop():
 
 
 def _ping() -> bool:
-    url = f"https://github.com/{repo_slug()}"
     try:
-        req = urllib.request.Request(url, method="HEAD", headers={"User-Agent": _UA})
+        req = urllib.request.Request(
+            commits_api_url(),
+            headers={"User-Agent": _UA, "Accept": "application/vnd.github+json"},
+        )
         with urllib.request.urlopen(req, timeout=_PROBE_TIMEOUT) as resp:
             return 200 <= getattr(resp, "status", 200) < 500
     except (urllib.error.URLError, urllib.error.HTTPError, TimeoutError, OSError, ValueError):
@@ -151,6 +161,36 @@ def _ping() -> bool:
 
 def project_root() -> Path:
     return Path(__file__).resolve().parent.parent
+
+
+def revision_path(root: Path) -> Path:
+    return Path(root) / _REVISION
+
+
+def read_revision(root: Path) -> str:
+    path = revision_path(root)
+    try:
+        return path.read_text(encoding="utf-8").strip()
+    except OSError:
+        return ""
+
+
+def write_revision(root: Path, sha: str):
+    try:
+        revision_path(root).write_text(sha.strip() + "\n", encoding="utf-8")
+    except OSError:
+        pass
+
+
+def remote_revision() -> str:
+    """SHA du bout de main, ou chaine vide si indisponible."""
+    req = urllib.request.Request(
+        commits_api_url(),
+        headers={"User-Agent": _UA, "Accept": "application/vnd.github+json"},
+    )
+    with urllib.request.urlopen(req, timeout=12) as resp:
+        data = json.loads(resp.read().decode("utf-8"))
+    return str(data.get("sha") or "").strip()
 
 
 def start_update(root: Path | None = None):
@@ -174,10 +214,10 @@ def start_update(root: Path | None = None):
 
 def _run_update(root: Path):
     try:
-        apply_update(root)
+        status = apply_update(root)
         set_step("restart", 0.0)
         with _lock:
-            _state["result"] = "ok"
+            _state["result"] = status
             _state["detail"] = ""
     except Exception as exc:
         with _lock:
@@ -188,24 +228,72 @@ def _run_update(root: Path):
             _state["busy"] = False
 
 
-def apply_update(root: Path):
-    """Installe l'archive GitHub dans root sans toucher save.json, var/, .venv."""
+def apply_update(root: Path) -> str:
+    """Installe l'archive. Retourne 'ok' ou 'same' (deja a jour)."""
     root = Path(root).resolve()
     root.mkdir(parents=True, exist_ok=True)
-    url = archive_url()
+    set_step("download", 0.0)
+    try:
+        remote = remote_revision()
+    except (urllib.error.URLError, urllib.error.HTTPError, TimeoutError, OSError, ValueError, json.JSONDecodeError):
+        remote = ""
+    if remote and remote == read_revision(root):
+        set_step("download", 1.0)
+        set_step("extract", 1.0)
+        return "same"
     with tempfile.TemporaryDirectory(prefix="world3-upd-") as tmp:
         archive = Path(tmp) / "src.tgz"
-        set_step("download", 0.0)
-        _download(url, archive)
+        _download(archive_url(), archive)
         set_step("download", 1.0)
         set_step("extract", 0.0)
         _install_archive(archive, root)
         set_step("extract", 1.0)
+    if remote:
+        write_revision(root, remote)
+    return "ok"
 
 
 def _download(url: str, dest: Path):
+    if _download_with_curl(url, dest):
+        return
+    _download_with_urllib(url, dest)
+
+
+def _download_with_curl(url: str, dest: Path) -> bool:
+    curl = shutil.which("curl")
+    if not curl:
+        return False
+    cmd = [
+        curl, "-L", "--fail", "--retry", "3", "--retry-delay", "2",
+        "--connect-timeout", "20", "--max-time", "600",
+        "-A", _UA, "-o", str(dest), url,
+    ]
+    try:
+        proc = subprocess.Popen(cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    except OSError:
+        return False
+    last = -1
+    while proc.poll() is None:
+        size = dest.stat().st_size if dest.is_file() else 0
+        frac = _download_fraction(size, 0)
+        pct = int(frac * 100)
+        if pct != last:
+            last = pct
+            set_step("download", frac)
+        time.sleep(0.25)
+    if proc.returncode != 0 or not dest.is_file() or dest.stat().st_size < 1024:
+        try:
+            dest.unlink()
+        except OSError:
+            pass
+        return False
+    set_step("download", 1.0)
+    return True
+
+
+def _download_with_urllib(url: str, dest: Path):
     req = urllib.request.Request(url, headers={"User-Agent": _UA})
-    with urllib.request.urlopen(req, timeout=180) as resp, open(dest, "wb") as out:
+    with urllib.request.urlopen(req, timeout=60) as resp, open(dest, "wb") as out:
         total = resp.headers.get("Content-Length")
         try:
             total_n = int(total) if total else 0
@@ -219,15 +307,19 @@ def _download(url: str, dest: Path):
                 break
             out.write(chunk)
             done += len(chunk)
-            if total_n > 0:
-                frac = min(1.0, done / total_n)
-                pct = int(frac * 100)
-                if pct != last_report:
-                    last_report = pct
-                    set_step("download", frac)
-            elif done > 0:
-                soft = min(0.9, done / (8 * 1024 * 1024))
-                set_step("download", soft)
+            frac = _download_fraction(done, total_n)
+            pct = int(frac * 100)
+            if pct != last_report:
+                last_report = pct
+                set_step("download", frac)
+
+
+def _download_fraction(done: int, total: int) -> float:
+    """Progression honnete : ne plafonne plus a 50 % sans Content-Length."""
+    if total > 0:
+        return min(0.99, done / total)
+    # Sans taille : asymptote vers 99 %, basee sur ~24 Mo typiques.
+    return min(0.99, done / float(_ARCHIVE_HINT))
 
 
 def _install_archive(archive: Path, root: Path):
@@ -248,7 +340,6 @@ def _install_with_tar(archive: Path, root: Path) -> bool:
     tar_bin = shutil.which("tar")
     if not tar_bin:
         return False
-    # GitHub : world3-main/...  -> strip 1 composant.
     cmd = [
         tar_bin, "-xzf", str(archive),
         "-C", str(root),
@@ -262,7 +353,6 @@ def _install_with_tar(archive: Path, root: Path) -> bool:
     except (OSError, subprocess.TimeoutExpired):
         return False
     if done.returncode != 0:
-        # Certains tar Windows n'ont pas les memes options : repli Python.
         return False
     if not (root / "main.py").is_file():
         return False
@@ -271,7 +361,7 @@ def _install_with_tar(archive: Path, root: Path) -> bool:
 
 
 def _install_with_python(archive: Path, root: Path):
-    """Repli : extractall une fois, puis copie (evite extract() membre a membre)."""
+    """Repli : extractall une fois, puis copie."""
     with tempfile.TemporaryDirectory(prefix="world3-py-") as tmp:
         extracted = Path(tmp)
         set_step("extract", 0.15)

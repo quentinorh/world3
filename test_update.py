@@ -12,6 +12,7 @@ os.environ.setdefault("SDL_VIDEODRIVER", "dummy")
 
 from kiosk.update import (
     STEPS,
+    _download_fraction,
     apply_update,
     archive_url,
     kept,
@@ -49,9 +50,12 @@ def test_repo_et_garde():
     info = progress()
     assert info["step"] == "download"
     assert info["label"] == "TÉLÉCHARGEMENT"
-    assert 20 <= info["percent"] <= 35
+    assert 30 <= info["percent"] <= 40
     set_step("extract", 1.0)
     assert progress()["percent"] == 95
+    # Sans Content-Length, ne plus plafonner a ~50 % des 8 premiers Mo.
+    assert _download_fraction(8 * 1024 * 1024, 0) < 0.45
+    assert _download_fraction(24 * 1024 * 1024, 0) >= 0.99
 
 
 def test_overlay_conserve_locaux(monkeypatch=None):
@@ -77,19 +81,24 @@ def test_overlay_conserve_locaux(monkeypatch=None):
 
         old_dl = upd._download
         old_tar = upd._install_with_tar
+        old_remote = upd.remote_revision
         upd._download = fake_download
         # Forcer le repli Python pour un comportement identique partout.
         upd._install_with_tar = lambda *_args, **_kw: False
+        upd.remote_revision = lambda: "abc123"
         try:
-            apply_update(root)
+            assert apply_update(root) == "ok"
+            assert apply_update(root) == "same"
         finally:
             upd._download = old_dl
             upd._install_with_tar = old_tar
+            upd.remote_revision = old_remote
 
         assert (root / "main.py").read_text(encoding="utf-8") == "NEW\n"
         assert (root / "kiosk" / "app.py").read_text(encoding="utf-8") == "# maj\n"
         assert (root / "save.json").read_text(encoding="utf-8") == "PARTIE\n"
         assert (root / "var" / "keep.txt").read_text(encoding="utf-8") == "ok\n"
+        assert (root / ".world3-revision").read_text(encoding="utf-8").strip() == "abc123"
 
 
 def test_archive_refuse_traversal():

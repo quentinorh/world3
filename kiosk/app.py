@@ -143,6 +143,9 @@ class Menu:
         if result == "ok":
             return True
         self.updating = False
+        if result == "same":
+            self._toast("DÉJÀ À JOUR", INK)
+            return False
         self._toast(detail.upper()[:24] if detail else "ÉCHEC", RUST)
         return False
 
