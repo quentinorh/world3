@@ -32,10 +32,11 @@ _KEEP = frozenset({
 })
 
 # Etapes affichees sur le menu (id, libelle). Les bornes % sont inclusives a gauche.
+# Telechargement puis une seule passe tar vers le dossier (pas d'extraction
+# Python membre a membre + recopie, trop lente sur SD de Pi 3).
 STEPS = (
-    ("download", "TÉLÉCHARGEMENT", 0, 60),
-    ("extract", "EXTRACTION", 60, 80),
-    ("install", "INSTALLATION", 80, 95),
+    ("download", "TÉLÉCHARGEMENT", 0, 55),
+    ("extract", "INSTALLATION", 55, 95),
     ("restart", "REDÉMARRAGE", 95, 100),
 )
 
@@ -188,29 +189,23 @@ def _run_update(root: Path):
 
 
 def apply_update(root: Path):
-    """Recopie l'archive GitHub sur root sans toucher save.json, var/, .venv."""
+    """Installe l'archive GitHub dans root sans toucher save.json, var/, .venv."""
     root = Path(root).resolve()
+    root.mkdir(parents=True, exist_ok=True)
     url = archive_url()
     with tempfile.TemporaryDirectory(prefix="world3-upd-") as tmp:
-        tmp_path = Path(tmp)
-        archive = tmp_path / "src.tgz"
+        archive = Path(tmp) / "src.tgz"
         set_step("download", 0.0)
         _download(url, archive)
         set_step("download", 1.0)
-        extracted = tmp_path / "src"
-        extracted.mkdir()
         set_step("extract", 0.0)
-        _safe_extract(archive, extracted)
+        _install_archive(archive, root)
         set_step("extract", 1.0)
-        source = _archive_root(extracted)
-        set_step("install", 0.0)
-        _overlay(source, root)
-        set_step("install", 1.0)
 
 
 def _download(url: str, dest: Path):
     req = urllib.request.Request(url, headers={"User-Agent": _UA})
-    with urllib.request.urlopen(req, timeout=120) as resp, open(dest, "wb") as out:
+    with urllib.request.urlopen(req, timeout=180) as resp, open(dest, "wb") as out:
         total = resp.headers.get("Content-Length")
         try:
             total_n = int(total) if total else 0
@@ -219,7 +214,7 @@ def _download(url: str, dest: Path):
         done = 0
         last_report = -1
         while True:
-            chunk = resp.read(64 * 1024)
+            chunk = resp.read(256 * 1024)
             if not chunk:
                 break
             out.write(chunk)
@@ -231,29 +226,76 @@ def _download(url: str, dest: Path):
                     last_report = pct
                     set_step("download", frac)
             elif done > 0:
-                # Sans taille : progression douce plafonnee a 90 % de l'etape.
                 soft = min(0.9, done / (8 * 1024 * 1024))
                 set_step("download", soft)
+
+
+def _install_archive(archive: Path, root: Path):
+    """Une passe vers root. Preferer le tar systeme (beaucoup plus rapide sur Pi)."""
+    if _install_with_tar(archive, root):
+        return
+    _install_with_python(archive, root)
+
+
+def _tar_excludes():
+    flags = []
+    for name in sorted(_KEEP):
+        flags.extend(["--exclude", name])
+    return flags
+
+
+def _install_with_tar(archive: Path, root: Path) -> bool:
+    tar_bin = shutil.which("tar")
+    if not tar_bin:
+        return False
+    # GitHub : world3-main/...  -> strip 1 composant.
+    cmd = [
+        tar_bin, "-xzf", str(archive),
+        "-C", str(root),
+        "--strip-components=1",
+        *_tar_excludes(),
+    ]
+    try:
+        done = subprocess.run(
+            cmd, capture_output=True, timeout=600, check=False,
+        )
+    except (OSError, subprocess.TimeoutExpired):
+        return False
+    if done.returncode != 0:
+        # Certains tar Windows n'ont pas les memes options : repli Python.
+        return False
+    if not (root / "main.py").is_file():
+        return False
+    set_step("extract", 1.0)
+    return True
+
+
+def _install_with_python(archive: Path, root: Path):
+    """Repli : extractall une fois, puis copie (evite extract() membre a membre)."""
+    with tempfile.TemporaryDirectory(prefix="world3-py-") as tmp:
+        extracted = Path(tmp)
+        set_step("extract", 0.15)
+        _safe_extract(archive, extracted)
+        set_step("extract", 0.55)
+        source = _archive_root(extracted)
+        _overlay(source, root)
+        set_step("extract", 1.0)
 
 
 def _safe_extract(archive: Path, dest: Path):
     dest = dest.resolve()
     with tarfile.open(archive, "r:gz") as tar:
-        members = tar.getmembers()
-        total = max(1, len(members))
-        for index, member in enumerate(members):
+        for member in tar.getmembers():
             name = member.name.replace("\\", "/")
             if name.startswith("/") or ".." in Path(name).parts:
                 raise RuntimeError(f"archive refusee : {name}")
             target = (dest / name).resolve()
             if not str(target).startswith(str(dest) + os.sep) and target != dest:
                 raise RuntimeError(f"archive refusee : {name}")
-            try:
-                tar.extract(member, dest, filter="data")
-            except TypeError:
-                tar.extract(member, dest)
-            if index == total - 1 or index % 8 == 0:
-                set_step("extract", (index + 1) / total)
+        try:
+            tar.extractall(dest, filter="data")
+        except TypeError:
+            tar.extractall(dest)
 
 
 def _archive_root(extracted: Path) -> Path:
@@ -277,17 +319,16 @@ def kept(rel: Path) -> bool:
 
 
 def _overlay(source: Path, root: Path):
-    files = [path for path in source.rglob("*") if path.is_file()]
-    total = max(1, len(files))
-    for index, path in enumerate(files):
+    for path in source.rglob("*"):
         rel = path.relative_to(source)
         if kept(rel):
             continue
         target = root / rel
+        if path.is_dir():
+            target.mkdir(parents=True, exist_ok=True)
+            continue
         target.parent.mkdir(parents=True, exist_ok=True)
         shutil.copy2(path, target)
-        if index == total - 1 or index % 4 == 0:
-            set_step("install", (index + 1) / total)
 
 
 def restart_kiosk() -> bool:

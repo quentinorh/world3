@@ -44,13 +44,13 @@ def test_repo_et_garde():
     assert kept(Path("deploy/target.ps1"))
     assert not kept(Path("kiosk/app.py"))
     assert not kept(Path("contenu.json"))
-    assert len(STEPS) == 4
+    assert len(STEPS) == 3
     set_step("download", 0.5)
     info = progress()
     assert info["step"] == "download"
     assert info["label"] == "TÉLÉCHARGEMENT"
-    assert 25 <= info["percent"] <= 35
-    set_step("install", 1.0)
+    assert 20 <= info["percent"] <= 35
+    set_step("extract", 1.0)
     assert progress()["percent"] == 95
 
 
@@ -75,12 +75,16 @@ def test_overlay_conserve_locaux(monkeypatch=None):
         def fake_download(url, dest):
             dest.write_bytes(archive.read_bytes())
 
-        old = upd._download
+        old_dl = upd._download
+        old_tar = upd._install_with_tar
         upd._download = fake_download
+        # Forcer le repli Python pour un comportement identique partout.
+        upd._install_with_tar = lambda *_args, **_kw: False
         try:
             apply_update(root)
         finally:
-            upd._download = old
+            upd._download = old_dl
+            upd._install_with_tar = old_tar
 
         assert (root / "main.py").read_text(encoding="utf-8") == "NEW\n"
         assert (root / "kiosk" / "app.py").read_text(encoding="utf-8") == "# maj\n"
