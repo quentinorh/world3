@@ -10,6 +10,14 @@ import pygame
 from device.power import halt_machine
 from device.screen import H, W, open_screen
 from device.widgets import draw_button, plate
+from kiosk.update import (
+    busy as update_busy,
+    ensure_probe,
+    online,
+    restart_kiosk,
+    start_update,
+    take_result,
+)
 from sp2050.sync import maybe_start, running
 from sp2050.theme import INK as SP_INK
 from sp2050.theme import MUTED as SP_MUTED
@@ -32,6 +40,7 @@ def main(argv=None):
     parser.add_argument("--scale", type=int, default=1)
     args = parser.parse_args(argv)
     maybe_start()
+    ensure_probe()
     screen = open_screen(args.fullscreen, args.scale, "WORLD3")
     root_save = _save_path()
     try:
@@ -82,23 +91,29 @@ class Menu:
         self.screen = screen
         self.pixel = Font()
         self.confirm = False
+        self.update_ask = False
         self.pressed = None
         self.down = None
         self.toast_until = 0.0
+        self.toast_text = "IMPOSSIBLE"
+        self.toast_color = RUST
         self.shade = pygame.Surface((W, H), pygame.SRCALPHA)
         self.shade.fill((0, 0, 0, 150))
         self.band = H // 4
+        ensure_probe()
 
     def loop(self) -> str:
         clock = pygame.time.Clock()
         while True:
             self.screen.poll()
+            self._poll_update()
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     return "quit"
                 if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
-                    if self.confirm:
+                    if self.confirm or self.update_ask:
                         self.confirm = False
+                        self.update_ask = False
                         self.pressed = None
                 elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
                     self._down(self.screen.logical(event.pos))
@@ -110,8 +125,31 @@ class Menu:
             self.screen.present()
             clock.tick(30)
 
+    def _poll_update(self):
+        result, _detail = take_result()
+        if result is None:
+            return
+        self.update_ask = False
+        if result == "ok":
+            self._toast("REDÉMARRAGE", INK)
+            if not restart_kiosk():
+                self._toast("À JOUR", INK)
+            return
+        self._toast("ÉCHEC", RUST)
+
+    def _toast(self, text, color=RUST, seconds=1.8):
+        self.toast_text = text
+        self.toast_color = color
+        self.toast_until = time.monotonic() + seconds
+
     def _power_rect(self):
         return pygame.Rect(20, 16, 48, 48)
+
+    def _update_rect(self):
+        return pygame.Rect(W - 20 - 48, 16, 48, 48)
+
+    def _update_visible(self):
+        return online() and not update_busy()
 
     def _world_rect(self):
         return pygame.Rect(0, 0, W, self.band)
@@ -137,17 +175,30 @@ class Menu:
             return None
         if pressed == "off":
             self.confirm = True
+            self.update_ask = False
+            return None
+        if pressed == "update":
+            self.update_ask = True
+            self.confirm = False
             return None
         if pressed == "cancel":
             self.confirm = False
+            self.update_ask = False
             return None
         if pressed == "do-off":
             self.confirm = False
             if halt_machine():
                 return "quit"
-            self.toast_until = time.monotonic() + 1.6
+            self._toast("IMPOSSIBLE", RUST)
             return None
-        if self.confirm:
+        if pressed == "do-update":
+            self.update_ask = False
+            if start_update():
+                self._toast("TÉLÉCHARGEMENT", INK, seconds=30.0)
+            else:
+                self._toast("OCCUPÉ", RUST)
+            return None
+        if self.confirm or self.update_ask or update_busy():
             return None
         if pressed == "world3":
             return "world3"
@@ -167,8 +218,18 @@ class Menu:
             if self._off_rect().collidepoint(pos):
                 return "do-off"
             return None
+        if self.update_ask:
+            if self._cancel_rect().collidepoint(pos):
+                return "cancel"
+            if self._off_rect().collidepoint(pos):
+                return "do-update"
+            return None
+        if update_busy():
+            return None
         if self._power_rect().collidepoint(pos):
             return "off"
+        if self._update_visible() and self._update_rect().collidepoint(pos):
+            return "update"
         if self._world_rect().collidepoint(pos):
             return "world3"
         if self._relief_rect().collidepoint(pos):
@@ -196,8 +257,12 @@ class Menu:
         self._draw_carte(surf)
         self._draw_sp(surf)
         self._draw_power(surf)
+        if self._update_visible() or update_busy():
+            self._draw_update(surf)
         if self.confirm:
             self._draw_confirm(surf)
+        elif self.update_ask:
+            self._draw_update_confirm(surf)
         elif time.monotonic() < self.toast_until:
             self._draw_toast(surf)
 
@@ -261,9 +326,14 @@ class Menu:
             )
 
     def _draw_power(self, surf):
-        pressed = self.pressed == "off" and not self.confirm
+        pressed = self.pressed == "off" and not self.confirm and not self.update_ask
         face, _color = plate(surf, self._power_rect(), pressed)
         _power_mark(surf, face)
+
+    def _draw_update(self, surf):
+        pressed = self.pressed == "update" and not self.update_ask and not self.confirm
+        face, _color = plate(surf, self._update_rect(), pressed or update_busy())
+        _update_mark(surf, face)
 
     def _draw_confirm(self, surf):
         surf.blit(self.shade, (0, 0))
@@ -284,8 +354,33 @@ class Menu:
             self.pressed == "do-off", 2, kind="rust",
         )
 
+    def _draw_update_confirm(self, surf):
+        surf.blit(self.shade, (0, 0))
+        panel = pygame.Rect(W // 2 - 250, H // 2 - 120, 500, 250)
+        pygame.draw.rect(surf, LINE, panel.move(4, 4))
+        pygame.draw.rect(surf, BG, panel)
+        pygame.draw.rect(surf, INK, panel, 2)
+        self.pixel.blit(
+            surf, "METTRE À JOUR ?", W // 2, panel.y + 48,
+            3, INK, align="center",
+        )
+        self.pixel.blit(
+            surf, "CODE DEPUIS GITHUB", W // 2, panel.y + 96,
+            2, MUTED, align="center",
+        )
+        draw_button(
+            surf, self.pixel, self._cancel_rect(), "ANNULER",
+            self.pressed == "cancel", 2,
+        )
+        draw_button(
+            surf, self.pixel, self._off_rect(), "OUI",
+            self.pressed == "do-update", 2, kind="on",
+        )
+
     def _draw_toast(self, surf):
-        self.pixel.blit(surf, "IMPOSSIBLE", W // 2, H - 72, 2, RUST, align="center")
+        self.pixel.blit(
+            surf, self.toast_text, W // 2, H - 72, 2, self.toast_color, align="center",
+        )
 
 
 def _has_stories():
@@ -307,8 +402,27 @@ _POWER = (
 
 
 def _power_mark(surf, face):
+    _pixel_mark(surf, face, _POWER, INK)
+
+
+# Fleche vers le bas : telecharger / mettre a jour.
+_UPDATE = (
+    "...#...",
+    "...#...",
+    "...#...",
+    ".#.#.#.",
+    "..###..",
+    "...#...",
+    ".#####.",
+)
+
+
+def _update_mark(surf, face):
+    _pixel_mark(surf, face, _UPDATE, INK)
+
+
+def _pixel_mark(surf, face, rows, color):
     scale = 4
-    rows = _POWER
     width = len(rows[0]) * scale
     height = len(rows) * scale
     x0 = face.centerx - width // 2
@@ -317,5 +431,5 @@ def _power_mark(surf, face):
         for x, ch in enumerate(row):
             if ch == "#":
                 pygame.draw.rect(
-                    surf, INK, (x0 + x * scale, y0 + y * scale, scale, scale),
+                    surf, color, (x0 + x * scale, y0 + y * scale, scale, scale),
                 )
