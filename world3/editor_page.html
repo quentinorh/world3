@@ -1,0 +1,928 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>WORLD3 — éditeur</title>
+<style>
+  :root {
+    --bg: #f6f1e6;
+    --panel: #fffdf8;
+    --panel-2: #efe8da;
+    --ink: #1a1714;
+    --on-ink: #e7e0d2;
+    --muted: #5c5348;
+    --dim: #6a6156;
+    --line: #c9beae;
+    --ochre: #7a4e0e;
+    --ochre-fill: #e0a448;
+    --select: #f4e6c8;
+    --rust: #8f3a2c;
+    --moss: #2a6b38;
+    --mono: "Cascadia Mono", "Cascadia Code", Consolas, "Courier New", monospace;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font: 15px/1.5 "Segoe UI", sans-serif;
+    min-height: 100vh;
+  }
+  header {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    padding: 14px 20px;
+    border-bottom: 1px solid var(--line);
+    position: sticky;
+    top: 0;
+    background: var(--panel);
+    z-index: 2;
+  }
+  .brand { flex: 1; min-width: 0; }
+  header h1 { font-size: 14px; letter-spacing: 0.14em; margin: 0; }
+  header p { margin: 2px 0 0; color: var(--muted); font-size: 13px; }
+  button, .tab {
+    background: var(--panel);
+    color: var(--ink);
+    border: 1px solid var(--line);
+    padding: 8px 12px;
+    cursor: pointer;
+    font: inherit;
+    border-radius: 2px;
+  }
+  button.primary {
+    background: var(--ochre-fill);
+    border-color: var(--ochre-fill);
+    color: var(--ink);
+    font-weight: 650;
+    padding: 8px 16px;
+  }
+  button.danger { border-color: var(--rust); color: var(--rust); background: transparent; }
+  button.danger:hover { background: rgba(143, 58, 44, 0.08); }
+  button:hover, .tab:hover { border-color: var(--muted); }
+  button:disabled { opacity: 0.45; cursor: default; }
+  button:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-visible {
+    outline: 2px solid var(--ochre);
+    outline-offset: 1px;
+  }
+  .tab.on { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+  .layout { display: flex; min-height: calc(100vh - 64px); }
+  nav {
+    width: 220px;
+    flex: none;
+    border-right: 1px solid var(--line);
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    position: sticky;
+    top: 64px;
+    align-self: flex-start;
+    max-height: calc(100vh - 76px);
+    overflow: auto;
+  }
+  nav .tab {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    text-align: left;
+    gap: 8px;
+    font-family: var(--mono);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    line-height: 1.3;
+    padding: 10px 12px;
+  }
+  .count { color: var(--dim); font-size: 12px; font-variant-numeric: tabular-nums; }
+  .tab.on .count { color: var(--on-ink); }
+  main { flex: 1; padding: 22px 28px 72px; max-width: 1120px; }
+  h1, h2, h3, .group-title {
+    font-family: var(--mono);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    line-height: 1.25;
+  }
+  h2 { font-size: 18px; margin: 0 0 8px; }
+  h3 { font-size: 13px; margin: 0 0 8px; }
+  .hint { color: var(--muted); margin: 0 0 16px; font-size: 14px; }
+  .work {
+    display: grid;
+    grid-template-columns: 260px minmax(0, 1fr);
+    gap: 22px;
+    align-items: start;
+  }
+  .rail {
+    position: sticky;
+    top: 84px;
+    max-height: calc(100vh - 104px);
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    min-height: 0;
+  }
+  .cards {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    overflow: auto;
+    min-height: 0;
+    padding-right: 2px;
+  }
+  .cards button {
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+    width: 100%;
+  }
+  .cards button.on { border-color: var(--ochre); background: var(--select); }
+  .item-title { color: inherit; }
+  .item-sub { color: var(--dim); font-size: 12px; line-height: 1.35; }
+  .cards button.on .item-sub { color: var(--muted); }
+  label.field { display: block; margin: 0 0 14px; }
+  .lab { display: block; color: var(--muted); font-size: 13px; margin-bottom: 4px; }
+  .note { color: var(--dim); font-size: 13px; margin: 6px 0 0; line-height: 1.45; }
+  input, textarea, select {
+    width: 100%;
+    background: var(--panel);
+    color: var(--ink);
+    border: 1px solid var(--line);
+    padding: 8px 10px;
+    font: inherit;
+    border-radius: 2px;
+  }
+  textarea { min-height: 88px; resize: vertical; }
+  .row { display: flex; gap: 12px; }
+  .row > * { flex: 1; min-width: 0; }
+  .actions { display: flex; gap: 8px; margin-top: 8px; flex-wrap: wrap; }
+  .model, .effect {
+    border: 1px solid var(--line);
+    background: var(--panel);
+    padding: 14px 16px;
+    margin: 0 0 16px;
+  }
+  .model { border-left: 3px solid var(--ochre); }
+  .effect { background: var(--panel-2); }
+  .effect p, .model p { margin: 0 0 8px; }
+  .effect p:last-child, .model p:last-child { margin-bottom: 0; }
+  .model .summary { color: var(--ink); }
+  .model .aside, .effect { color: var(--muted); }
+  .kvs { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 10px; }
+  .kv {
+    border: 1px solid var(--line);
+    padding: 3px 8px;
+    font-size: 12px;
+    color: var(--muted);
+  }
+  .kv b { color: var(--ochre); font-weight: 620; }
+  .warnbox {
+    border: 1px solid var(--rust);
+    color: var(--ink);
+    padding: 10px 12px;
+    margin: 0 0 12px;
+    font-size: 14px;
+  }
+  .ladder { display: flex; flex-direction: column; gap: 6px; margin: 8px 0 4px; }
+  .rung {
+    display: grid;
+    grid-template-columns: 28px 92px minmax(0, 1fr);
+    gap: 10px;
+    align-items: baseline;
+    padding: 8px 10px;
+    background: var(--panel-2);
+    border: 1px solid var(--line);
+  }
+  .rung .n { color: var(--ochre); font-variant-numeric: tabular-nums; }
+  .rung .v { color: var(--ink); font-variant-numeric: tabular-nums; }
+  .rung .d { color: var(--muted); font-size: 13px; }
+  .picker { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .picker button { text-align: left; padding: 12px; display: flex; flex-direction: column; align-items: flex-start; gap: 4px; }
+  .picker strong {
+    font-family: var(--mono);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--ochre);
+  }
+  .picker span { color: var(--muted); font-size: 13px; }
+  .group-title { margin: 18px 0 4px; font-size: 12px; letter-spacing: 0.12em; color: var(--ochre); }
+  .param {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 112px;
+    gap: 12px;
+    align-items: start;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .param .lab { margin-bottom: 2px; }
+  .param .note { margin-top: 4px; }
+  .status { color: var(--moss); font-size: 13px; white-space: nowrap; }
+  .status.bad { color: var(--rust); }
+  .status.warn { color: var(--ochre); }
+  @media (max-width: 860px) {
+    header { flex-wrap: wrap; }
+    .layout { flex-direction: column; }
+    nav {
+      width: auto;
+      flex-direction: row;
+      overflow: auto;
+      border-right: 0;
+      border-bottom: 1px solid var(--line);
+    }
+    nav .tab { flex: none; }
+    .work, .picker, .param, .row { grid-template-columns: 1fr; display: grid; }
+    .row { display: grid; }
+    .rail { position: static; max-height: 280px; }
+    main { padding: 16px 16px 64px; }
+  }
+</style>
+</head>
+<body>
+<header>
+  <div class="brand">
+    <h1>WORLD3</h1>
+    <p>Textes, orientations et cartes. Enregistrer écrit contenu.json. Le jeu le relit à son prochain lancement.</p>
+  </div>
+  <span id="status" class="status"></span>
+  <button class="primary" id="save" type="button">Enregistrer</button>
+</header>
+<div class="layout">
+  <nav id="nav"></nav>
+  <main id="main"></main>
+</div>
+<script>
+const SECTIONS = [
+  ["intro", "Introduction"],
+  ["orientations", "Orientations"],
+  ["dilemmas", "Dilemmes"],
+  ["forks", "Fourches"],
+  ["events", "Événements"],
+  ["aide", "Aide"],
+  ["credits", "Crédits"],
+  ["fin", "Fin"],
+];
+const FIN_GLOSS = {
+  tient: "Le monde se tient. On peut continuer après 2100.",
+  chute: "Une limite a lâché. Il n'y a plus de conseil.",
+  bout: "Le monde tenait encore. Le calcul s'arrête à cette date.",
+};
+let doc = null;
+let section = "intro";
+let pick = 0;
+let showPicker = false;
+let dirty = false;
+let afterWrite = null;
+
+const $ = (id) => document.getElementById(id);
+function linesToText(lines) { return (lines || []).join("\n"); }
+function textToLines(value) { return value.split("\n").map(s => s.trim()).filter(Boolean); }
+function parasToText(lines) { return (lines || []).join("\n\n"); }
+function textToParas(value) {
+  return value.split(/\n\s*\n/).map(s => s.trim()).filter(Boolean);
+}
+function asNumber(value) {
+  const text = String(value).trim().replace(",", ".");
+  if (text === "" || text === "-" || text === "." || text === "-.") return null;
+  const n = Number(text);
+  return Number.isFinite(n) ? n : null;
+}
+function fr(n) {
+  return Number(n).toLocaleString("fr-FR", { maximumFractionDigits: 2 });
+}
+function escapeAttr(value) {
+  return String(value).replace(/&/g, "&amp;").replace(/"/g, "&quot;");
+}
+function escapeText(value) {
+  return String(value).replace(/&/g, "&amp;").replace(/</g, "&lt;");
+}
+function mechanic(kind) {
+  return (doc.mechanics || []).find(item => item.id === kind) || null;
+}
+function themeOf(id) {
+  return (doc.themes || []).find(item => item.id === id) || null;
+}
+function touch() {
+  dirty = true;
+  const status = $("status");
+  if (!status || status.classList.contains("bad")) return;
+  status.className = "status warn";
+  status.textContent = "Modifications non enregistrées";
+}
+function sectionCount(id) {
+  if (id === "intro") return doc.intro.length;
+  if (id === "orientations") return doc.orientations.length;
+  if (id === "dilemmas") return doc.dilemmas.length;
+  if (id === "forks") return doc.forks.length;
+  if (id === "events") return doc.events.length;
+  if (id === "fin") return Object.keys(doc.fin).length;
+  return "";
+}
+
+function renderNav() {
+  $("nav").innerHTML = SECTIONS.map(([id, label]) => {
+    const count = sectionCount(id);
+    const badge = count === "" ? "" : `<span class="count">${count}</span>`;
+    return `<button type="button" class="tab ${id === section ? "on" : ""}" data-section="${id}">${label}${badge}</button>`;
+  }).join("");
+  $("nav").querySelectorAll("button").forEach(btn => {
+    btn.onclick = () => {
+      section = btn.dataset.section;
+      pick = 0;
+      showPicker = false;
+      draw();
+    };
+  });
+}
+
+function field(label, html, note) {
+  const help = note ? `<p class="note">${note}</p>` : "";
+  return `<label class="field"><span class="lab">${label}</span>${html}${help}</label>`;
+}
+function input(key, value) {
+  return `<input data-key="${key}" value="${escapeAttr(value ?? "")}">`;
+}
+function area(key, value, paras) {
+  const text = paras ? parasToText(value) : linesToText(value);
+  return `<textarea data-key="${key}" data-paras="${paras ? 1 : 0}">${escapeText(text)}</textarea>`;
+}
+function itemLabel(title, sub) {
+  const extra = sub ? `<span class="item-sub">${escapeText(sub)}</span>` : "";
+  return `<span class="item-title">${escapeText(title)}</span>${extra}`;
+}
+function listButtons(items, labelFn) {
+  return `<div class="cards">${items.map((item, i) =>
+    `<button type="button" class="${i === pick ? "on" : ""}" data-pick="${i}">${labelFn(item, i)}</button>`
+  ).join("")}</div>`;
+}
+
+function choiceEffect(choice) {
+  if (!choice) return "";
+  const parts = [];
+  const delta = Number(choice.delta) || 0;
+  if (choice.law === null || choice.law === undefined || choice.law === "") {
+    parts.push("Ce bouton ne déplace aucune orientation.");
+  } else {
+    const law = doc.orientations[Number(choice.law)];
+    const mech = law ? mechanic(law.kind) : null;
+    const name = law ? law.title : "une orientation qui n'existe plus";
+    if (!delta) {
+      parts.push(`Lié à ${name}, le cran reste où il est.`);
+    } else {
+      const sens = delta > 0 ? "monte" : "descend";
+      const n = Math.abs(delta);
+      parts.push(`Ce bouton ${sens} ${name} de ${n} cran${n > 1 ? "s" : ""}.`);
+    }
+    if (mech) parts.push(delta > 0 ? mech.raise_effect : delta < 0 ? mech.lower_effect : mech.summary);
+    parts.push("Un dilemme est gratuit : les jetons restent pour les cadrans.");
+  }
+  if (choice.shock) {
+    const ev = (doc.events || []).find(item => item.id === choice.shock);
+    parts.push(ev
+      ? `En plus, l'événement « ${ev.title} » s'applique (${ev.id}).`
+      : `L'identifiant « ${choice.shock} » ne correspond à aucun événement.`);
+  }
+  return parts.join(" ");
+}
+
+function fxSentence(spec, value) {
+  if (spec.mode === "mul") {
+    const pct = Math.round((value - 1) * 100);
+    const sign = pct > 0 ? `+${pct} %` : `${pct} %`;
+    return `${spec.label} × ${fr(value)} (${sign}). ${spec.effect}`;
+  }
+  if (spec.mode === "keep") {
+    return `${spec.label} : il en reste ${Math.round(value * 100)} %. ${spec.effect}`;
+  }
+  if (spec.mode === "years") {
+    return `${spec.label} : ${fr(value)} an${value > 1 ? "s" : ""}. ${spec.effect}`;
+  }
+  const signed = value > 0 ? `+${fr(value)}` : fr(value);
+  return `${spec.label} ${signed}. ${spec.effect}`;
+}
+function fxSentences(fx) {
+  const out = [];
+  for (const spec of doc.fx_help || []) {
+    const raw = fx ? fx[spec.key] : undefined;
+    const value = raw === undefined || raw === "" ? Number(spec.neutral) : Number(raw);
+    if (!Number.isFinite(value) || Math.abs(value - Number(spec.neutral)) < 1e-9) continue;
+    out.push(fxSentence(spec, value));
+  }
+  return out;
+}
+
+function lawOptions(selected) {
+  const none = selected === null || selected === undefined || selected === "";
+  const head = `<option value="" ${none ? "selected" : ""}>Aucune orientation</option>`;
+  const rest = doc.orientations.map((law, i) => {
+    const mech = mechanic(law.kind);
+    const sub = mech ? ` — ${mech.variable}` : "";
+    const on = !none && Number(selected) === i;
+    return `<option value="${i}" ${on ? "selected" : ""}>${escapeText(law.title + sub)}</option>`;
+  }).join("");
+  return head + rest;
+}
+
+function choiceFields(prefix, choice) {
+  const shocks = (doc.events || []).map(ev =>
+    `<option value="${escapeAttr(ev.id)}">${escapeText(ev.title)}</option>`
+  ).join("");
+  return `
+    <div class="row">
+      <div>${field("Bouton " + prefix.toUpperCase(), input(prefix + ".label", choice.label), "Le mot sur le bouton, en capitales à l'écran.")}</div>
+      <div>${field("Précision", input(prefix + ".sub", choice.sub), "La ligne sous le bouton. Elle dit la conséquence en une phrase.")}</div>
+    </div>
+    <div class="row">
+      <div>${field("Orientation", `<select data-key="${prefix}.law">${lawOptions(choice.law)}</select>`, "Le cadran que ce bouton pousse. L'index suit l'ordre des orientations.")}</div>
+      <div>${field("Crans", input(prefix + ".delta", choice.delta), "+1 monte d'un cran, −1 descend, 0 laisse le cadran. Plusieurs crans d'un coup sont possibles.")}</div>
+    </div>
+    ${field("Événement en plus", `<input data-key="${prefix}.shock" list="shocks-${prefix}" value="${escapeAttr(choice.shock || "")}"><datalist id="shocks-${prefix}">${shocks}</datalist>`, "Vide : seulement le cran. Sinon l'identifiant d'un événement, souvent un effet hors tirage comme le deep-mining.")}
+    <div class="effect" data-choice-effect="${prefix}"></div>`;
+}
+
+function orientationSub(law) {
+  const mech = mechanic(law.kind);
+  if (!mech) return law.kind || "";
+  const twins = doc.orientations.filter(item => item.kind === law.kind).length;
+  const extra = twins > 1 ? " · même variable" : "";
+  return `${mech.curve} · ${mech.variable}${extra}`;
+}
+
+function pickerHtml() {
+  const cards = (doc.mechanics || []).map(item => `
+    <button type="button" data-kind="${escapeAttr(item.id)}">
+      <strong>${escapeText(item.title)}</strong>
+      <span>${escapeText(item.variable)} · courbe ${escapeText(item.curve)}</span>
+      <span>${escapeText(item.summary)}</span>
+    </button>`).join("");
+  return `
+    <h3>Quel mécanisme ?</h3>
+    <p class="hint">La nouvelle orientation reprend les cinq crans de ce levier. Vous changez les mots. Dans le modèle, si deux orientations règlent la même variable, le cran le plus haut l'emporte.</p>
+    <div class="picker">${cards}</div>`;
+}
+
+function orientationForm(law) {
+  const mech = mechanic(law.kind);
+  const levels = (law.levels && law.levels.length ? law.levels : (mech && mech.levels) || []);
+  const twins = doc.orientations.filter(item => item.kind === law.kind).length;
+  const model = mech ? `
+    <div class="model">
+      <h3>Effet sur le modèle</h3>
+      <div class="kvs">
+        <span class="kv">Variable <b>${escapeText(mech.variable)}</b></span>
+        <span class="kv">Courbe <b>${escapeText(mech.curve)}</b></span>
+        <span class="kv">Monter <b>${escapeText(law.up || mech.up)}</b></span>
+      </div>
+      <p class="summary">${escapeText(mech.summary)}</p>
+      <p class="aside">${escapeText(mech.raise_effect)}</p>
+      <p class="aside">${escapeText(mech.lower_effect)}</p>
+    </div>
+    ${twins > 1 ? `<div class="warnbox">${escapeText(mech.stack)}</div>` : ""}
+    <h3>Les cinq crans</h3>
+    <p class="note">Cran 0, c'est le scénario historique. Ces chiffres sont les équations du modèle.</p>
+    <div class="ladder">${levels.map((level, i) => `
+      <div class="rung">
+        <span class="n">${i}</span>
+        <span class="v">${escapeText(level.shown)}</span>
+        <span class="d">${escapeText(level.note || "")}</span>
+      </div>`).join("")}</div>` : `<p class="hint">Ce levier n'a pas d'équation associée.</p>`;
+  const last = doc.orientations.length <= 1;
+  return `
+    ${model}
+    <p class="note">Identifiant ${escapeText(law.id)}. Les dilemmes visent la position dans la liste, pas ce nom.</p>
+    ${field("Titre", input("title", law.title), "Nom du cadran, en capitales à l'écran.")}
+    ${field("Unité", input("unit", law.unit), "Le mot sous le chiffre du cadran, par exemple norme, ans, fois.")}
+    ${field("Deux lignes sous le titre", area("hint", law.hint, false), "Elles tiennent sous le nom, pendant le conseil. Une phrase par ligne.")}
+    <div class="row">
+      <div>${field("Quand on monte", input("up", law.up), "La phrase ocre après un cran vers le haut.")}</div>
+      <div>${field("Quand on descend", input("down", law.down), "La phrase ocre après un cran vers le bas.")}</div>
+    </div>
+    ${field("Fiche", area("info", law.info, true), "Le bouton i du conseil. Une ligne vide sépare les paragraphes.")}
+    <div class="actions">
+      <button type="button" class="danger" id="del" ${last ? "disabled" : ""}>Retirer cette orientation</button>
+    </div>
+    ${last ? `<p class="note">Le conseil garde au moins une orientation.</p>` : `<p class="note">Retirer une orientation décale les dilemmes qui pointaient après elle. Une partie déjà commencée range les crans par position : mieux vaut en lancer une nouvelle.</p>`}`;
+}
+
+function slideForm(slide) {
+  if (!slide) return "<p>Aucune étape.</p>";
+  return field("Titre", input("title", slide.title))
+    + field("Texte", area("lines", slide.lines, false), "Une phrase par ligne. L'écran les empile sous le titre.");
+}
+
+function cardForm(item, dated) {
+  const theme = themeOf(dated ? item.theme : item.id);
+  const themeNote = theme ? theme.effect : "La limite dont parle la carte.";
+  const themes = (doc.themes || []).map(row =>
+    `<option value="${escapeAttr(row.id)}" ${item.theme === row.id ? "selected" : ""}>${escapeText(row.label)}</option>`
+  ).join("");
+  const forkBox = !dated && theme
+    ? `<div class="model"><h3>Quand cette fourche s'ouvre</h3><p class="summary">${escapeText(theme.effect)}</p></div>`
+    : "";
+  return `
+    ${forkBox}
+    <div class="row">
+      <div>${field("Identifiant", input("id", item.id), dated
+        ? "Nom interne, sans espace. Il sert à ne pas rejouer la carte."
+        : "Nom de la limite : metal, pollution, essor, sol, faim. Le jeu choisit la fourche avec ce nom.")}</div>
+      ${dated ? `<div>${field("Année", input("year", item.year), "Le conseil de cette année-là. 2030, 2040, et ainsi de suite. Deux cartes peuvent partager la même année : elles s'ouvrent l'une après l'autre.")}</div>` : ""}
+      ${dated ? `<div>${field("Limite", `<select data-key="theme">${themes}</select>`, themeNote)}</div>` : ""}
+    </div>
+    ${dated ? field("Marque « conseil de cette année »", `<select data-key="live_only"><option value="0" ${item.live_only ? "" : "selected"}>non</option><option value="1" ${item.live_only ? "selected" : ""}>oui</option></select>`, "Enregistrée avec la carte. Le jeu choisit le dilemme par l'année, puis une fourche si une autre limite serre.") : ""}
+    ${field("Titre", input("title", item.title))}
+    ${field("Texte de la carte", area("lines", item.lines, false), "Une phrase par ligne, sous le titre.")}
+    ${field("Fiche", area("info", item.info, true), "Le bouton i. Une ligne vide sépare les paragraphes.")}
+    <h3>Choix A</h3>
+    ${choiceFields("a", item.a)}
+    <h3>Choix B</h3>
+    ${choiceFields("b", item.b)}`;
+}
+
+function eventForm(item) {
+  const fx = item.fx || {};
+  const groups = [
+    ["durable", "Multiplicateurs durables", "Ils partent de l'année de l'événement et durent. S'il en tombe plusieurs, ils se multiplient. 1 laisse la valeur telle que les orientations l'ont posée."],
+    ["choc", "Choc de stock, une seule fois", "Ils frappent l'année où l'événement est franchi. 1 pour une part restante, ou 0 pour un ajout, ne change pas le stock."],
+  ];
+  const blocks = groups.map(([id, title, lede]) => {
+    const rows = (doc.fx_help || []).filter(spec => spec.group === id).map(spec => `
+      <div class="param">
+        <div>
+          <span class="lab">${escapeText(spec.label)}</span>
+          <p class="note">${escapeText(spec.effect)}</p>
+        </div>
+        ${input("fx." + spec.key, fx[spec.key] ?? spec.neutral)}
+      </div>`).join("");
+    return `<h3 class="group-title">${title}</h3><p class="hint">${lede}</p>${rows}`;
+  }).join("");
+  return `
+    <div class="row">
+      <div>${field("Identifiant", input("id", item.id), "Les dilemmes peuvent citer cet identifiant dans « événement en plus ».")}</div>
+      <div>${field("Dans le tirage", `<select data-key="pool"><option value="1" ${item.pool ? "selected" : ""}>oui</option><option value="0" ${item.pool ? "" : "selected"}>non, réservé à une carte</option></select>`, "Oui : le monde peut le tirer entre deux conseils. Non : seul un dilemme qui cite son identifiant le déclenche.")}</div>
+    </div>
+    ${field("Titre", input("title", item.title))}
+    ${field("Texte", area("lines", item.lines, false), "Une phrase par ligne.")}
+    <div class="row">
+      <div>${field("Conséquence affichée", input("effect", item.effect), "La ligne ocre sur la carte.")}</div>
+      <div>${field("Bannière sous le globe", input("banner", item.banner), "Elle tourne encore une douzaine d'années sous la planète.")}</div>
+    </div>
+    ${field("Fiche", area("info", item.info, true), "Le bouton i. Une ligne vide sépare les paragraphes.")}
+    <h3>Effet sur le modèle</h3>
+    <div class="effect" id="fx-summary"></div>
+    ${blocks}`;
+}
+
+function paintChoiceEffects(getItem) {
+  const paint = () => {
+    const item = getItem();
+    if (!item) return;
+    document.querySelectorAll("[data-choice-effect]").forEach(node => {
+      node.textContent = choiceEffect(item[node.dataset.choiceEffect]);
+    });
+  };
+  paint();
+  return paint;
+}
+function paintFx(getItem) {
+  const paint = () => {
+    const node = $("fx-summary");
+    const item = getItem();
+    if (!node || !item) return;
+    const lines = fxSentences(item.fx || {});
+    node.innerHTML = lines.length
+      ? lines.map(line => `<p>${escapeText(line)}</p>`).join("")
+      : "<p>Aucun écart. L'événement ne change pas les équations : le monde continue sur les orientations en cours.</p>";
+  };
+  paint();
+  return paint;
+}
+
+function draw() {
+  afterWrite = null;
+  renderNav();
+  const main = $("main");
+  if (section === "intro") {
+    main.innerHTML = `<h2>Introduction</h2>
+      <p class="hint">Étapes avant la partie. Chaque écran a un titre, puis une phrase par ligne.</p>
+      <div class="work">
+        <div class="rail">
+          <button type="button" id="add">Ajouter une étape</button>
+          ${listButtons(doc.intro, (slide, i) => itemLabel(`${i + 1}. ${slide.title}`))}
+        </div>
+        <div class="sheet">${slideForm(doc.intro[pick])}</div>
+      </div>`;
+    bindSlide();
+  } else if (section === "orientations") {
+    const law = doc.orientations[pick];
+    main.innerHTML = `<div class="work">
+      <div class="rail">
+        <button type="button" id="add">${showPicker ? "Fermer" : "Ajouter une orientation"}</button>
+        ${listButtons(doc.orientations, item => itemLabel(item.title, orientationSub(item)))}
+      </div>
+      <div class="sheet">
+        <h2>Orientations</h2>
+        <p class="hint">Les leviers du conseil. Trois jetons, un cran coûte un jeton. Ajouter reprend un mécanisme déjà dans World3. Retirer l'enlève du cadran : sa variable reste alors au scénario historique.</p>
+        ${showPicker ? pickerHtml() : (law ? orientationForm(law) : "<p>Aucune orientation.</p>")}
+      </div>
+    </div>`;
+    bindOrientations();
+  } else if (section === "dilemmas" || section === "forks") {
+    const items = doc[section];
+    const item = items[pick];
+    const dated = section === "dilemmas";
+    const title = dated ? "Dilemmes" : "Fourches";
+    const hint = dated
+      ? "Un conseil tous les dix ans, à partir de 2030. Deux cartes de la même année s'ouvrent l'une après l'autre. Si une autre limite serre, la fourche de cette limite remplace la carte. La carte AVANT s'ouvre une fois, avant les dilemmes de l'année."
+      : "Carte de remplacement. Elle s'ouvre à la place du dilemme daté quand sa limite est celle qui serre.";
+    main.innerHTML = `<h2>${title}</h2><p class="hint">${hint}</p>
+      <div class="work">
+        <div class="rail">
+          <button type="button" id="add">Nouvelle carte</button>
+          ${listButtons(items, card => itemLabel(
+            dated ? (card.aside ? "AVANT" : String(card.year)) : card.title,
+            dated ? card.title : (themeOf(card.id) ? themeOf(card.id).label : card.id)
+          ))}
+        </div>
+        <div class="sheet">
+          ${item ? cardForm(item, dated) : "<p>Aucune carte.</p>"}
+          ${item ? `<div class="actions"><button type="button" class="danger" id="del">Supprimer</button></div>` : ""}
+        </div>
+      </div>`;
+    bindCard(items, dated);
+  } else if (section === "events") {
+    const item = doc.events[pick];
+    main.innerHTML = `<h2>Événements</h2>
+      <p class="hint">Le monde décide. Environ deux fois en dix ans, entre les conseils. Un effet hors tirage ne sort que si un dilemme cite son identifiant.</p>
+      <div class="work">
+        <div class="rail">
+          <button type="button" id="add">Nouvel événement</button>
+          ${listButtons(doc.events, ev => itemLabel(ev.title, ev.pool ? "dans le tirage" : "réservé à une carte"))}
+        </div>
+        <div class="sheet">
+          ${item ? eventForm(item) : "<p>Aucun événement.</p>"}
+          ${item ? `<div class="actions"><button type="button" class="danger" id="del">Supprimer</button></div>` : ""}
+        </div>
+      </div>`;
+    bindEvent();
+  } else if (section === "aide" || section === "credits") {
+    const label = section === "aide" ? "Aide" : "Crédits";
+    main.innerHTML = `<h2>${label}</h2>
+      <p class="hint">Une ligne vide sépare les paragraphes. Une ligne courte sans point devient un titre à l'écran.</p>
+      ${field("Texte", area("body", doc[section], true))}`;
+    const node = main.querySelector("textarea");
+    node.oninput = () => {
+      doc[section] = textToParas(node.value);
+      touch();
+    };
+  } else if (section === "fin") {
+    const keys = Object.keys(doc.fin);
+    const key = keys[pick] || keys[0];
+    const block = doc.fin[key];
+    main.innerHTML = `<h2>Fin</h2>
+      <p class="hint">${escapeText(FIN_GLOSS[key] || "")}</p>
+      <div class="work">
+        <div class="rail">${listButtons(keys, name => itemLabel(name, FIN_GLOSS[name] || ""))}</div>
+        <div class="sheet">
+          ${field("Titre", input("title", block.title))}
+          ${field("Texte", area("lines", block.lines, true), "Une ligne vide sépare les paragraphes.")}
+        </div>
+      </div>`;
+    bindObject(block);
+  }
+}
+
+function bindSlide() {
+  const get = () => doc.intro[pick];
+  bindFields(get);
+  const add = $("add");
+  if (add) add.onclick = () => {
+    doc.intro.push({ title: "ETAPE", lines: ["..."] });
+    pick = doc.intro.length - 1;
+    touch();
+    draw();
+  };
+}
+
+function nextId(kind) {
+  const used = new Set(doc.orientations.map(item => item.id));
+  if (!used.has(kind)) return kind;
+  let n = 2;
+  while (used.has(`${kind}-${n}`)) n += 1;
+  return `${kind}-${n}`;
+}
+function addOrientation(kind) {
+  const mech = mechanic(kind);
+  if (!mech) return;
+  doc.orientations.push({
+    id: nextId(kind),
+    kind,
+    title: mech.title,
+    unit: mech.unit,
+    hint: mech.hint.slice(),
+    up: mech.up,
+    down: mech.down,
+    info: (mech.info || []).slice(),
+    levels: (mech.levels || []).map(level => ({ shown: level.shown, note: level.note })),
+  });
+  pick = doc.orientations.length - 1;
+  showPicker = false;
+  touch();
+  draw();
+}
+function retargetLaw(choice, index) {
+  if (!choice || choice.law === null || choice.law === undefined || choice.law === "") return;
+  const n = Number(choice.law);
+  if (n === index) choice.law = null;
+  else if (n > index) choice.law = n - 1;
+}
+function deleteOrientation() {
+  if (doc.orientations.length <= 1) return;
+  const law = doc.orientations[pick];
+  const name = law ? law.title : "cette orientation";
+  if (!window.confirm(`Retirer « ${name} » du conseil ? Les cartes qui la choisissaient perdent ce lien.`)) return;
+  const index = pick;
+  for (const card of doc.dilemmas) {
+    retargetLaw(card.a, index);
+    retargetLaw(card.b, index);
+  }
+  for (const card of doc.forks) {
+    retargetLaw(card.a, index);
+    retargetLaw(card.b, index);
+  }
+  doc.orientations.splice(index, 1);
+  pick = Math.max(0, Math.min(pick, doc.orientations.length - 1));
+  touch();
+  draw();
+}
+function bindOrientations() {
+  if (!showPicker && doc.orientations[pick]) bindFields(() => doc.orientations[pick]);
+  else bindPicks();
+  document.querySelectorAll("[data-kind]").forEach(btn => {
+    btn.onclick = () => addOrientation(btn.dataset.kind);
+  });
+  const add = $("add");
+  if (add) add.onclick = () => {
+    showPicker = !showPicker;
+    draw();
+  };
+  const del = $("del");
+  if (del) del.onclick = deleteOrientation;
+}
+
+function bindCard(items, dated) {
+  const item = items[pick];
+  if (item) {
+    bindFields(() => items[pick]);
+    afterWrite = paintChoiceEffects(() => items[pick]);
+    afterWrite();
+  } else bindPicks();
+  const add = $("add");
+  if (add) add.onclick = () => {
+    const blank = {
+      id: "nouveau",
+      title: "NOUVEAU",
+      lines: ["..."],
+      info: [],
+      theme: "calme",
+      a: { label: "A", law: null, delta: 0, sub: "", shock: null },
+      b: { label: "B", law: null, delta: 0, sub: "", shock: null },
+    };
+    if (dated) { blank.year = 2030; blank.live_only = false; }
+    items.push(blank);
+    pick = items.length - 1;
+    touch();
+    draw();
+  };
+  const del = $("del");
+  if (del) del.onclick = () => {
+    items.splice(pick, 1);
+    pick = Math.max(0, pick - 1);
+    touch();
+    draw();
+  };
+}
+
+function bindEvent() {
+  const item = doc.events[pick];
+  if (!item) return;
+  if (!item.fx) item.fx = {};
+  bindFields(() => doc.events[pick]);
+  afterWrite = paintFx(() => doc.events[pick]);
+  afterWrite();
+  const add = $("add");
+  if (add) add.onclick = () => {
+    const fx = {};
+    for (const spec of doc.fx_help || []) fx[spec.key] = spec.neutral;
+    doc.events.push({
+      id: "nouveau", pool: true, title: "NOUVEAU", lines: ["..."], effect: "", banner: "", info: [], fx,
+    });
+    pick = doc.events.length - 1;
+    touch();
+    draw();
+  };
+  const del = $("del");
+  if (del) del.onclick = () => {
+    doc.events.splice(pick, 1);
+    pick = Math.max(0, pick - 1);
+    touch();
+    draw();
+  };
+}
+
+function bindPicks() {
+  document.querySelectorAll("[data-pick]").forEach(btn => {
+    btn.onclick = () => {
+      pick = Number(btn.dataset.pick);
+      showPicker = false;
+      draw();
+    };
+  });
+}
+function bindFields(getItem) {
+  document.querySelectorAll("[data-key]").forEach(node => {
+    const apply = () => writeKey(getItem(), node);
+    node.oninput = apply;
+    node.onchange = apply;
+  });
+  bindPicks();
+}
+function bindObject(obj) {
+  bindFields(() => obj);
+}
+
+function writeKey(obj, node) {
+  if (!obj) return;
+  const key = node.dataset.key;
+  let value = node.value;
+  if (node.dataset.paras === "1") value = textToParas(value);
+  else if (node.tagName === "TEXTAREA") value = textToLines(value);
+  else if (key === "year" || key.endsWith(".delta") || key.startsWith("fx.")) {
+    const n = asNumber(value);
+    if (n === null) return;
+    value = n;
+  } else if (key === "live_only" || key === "pool") value = value === "1";
+  else if (key.endsWith(".law")) value = value === "" ? null : Number(value);
+  else if (key.endsWith(".shock")) value = value.trim() || null;
+  if (key.includes(".")) {
+    const [head, tail] = key.split(".");
+    if (head === "fx") {
+      obj.fx = obj.fx || {};
+      obj.fx[tail] = value;
+    } else {
+      obj[head] = obj[head] || {};
+      obj[head][tail] = value;
+    }
+  } else obj[key] = value;
+  touch();
+  if (afterWrite) afterWrite();
+}
+
+$("save").onclick = async () => {
+  const status = $("status");
+  status.className = "status";
+  status.textContent = "Enregistrement…";
+  try {
+    const res = await fetch("/api/contenu", {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(doc),
+    });
+    if (!res.ok) throw new Error(await res.text());
+    dirty = false;
+    status.textContent = "Enregistré. Relancez le jeu.";
+  } catch (err) {
+    status.className = "status bad";
+    status.textContent = String(err.message || err);
+  }
+};
+
+document.addEventListener("keydown", (event) => {
+  if ((event.ctrlKey || event.metaKey) && event.key === "s") {
+    event.preventDefault();
+    $("save").click();
+  } else if (event.key === "Escape" && showPicker) {
+    showPicker = false;
+    draw();
+  }
+});
+window.addEventListener("beforeunload", (event) => {
+  if (!dirty) return;
+  event.preventDefault();
+  event.returnValue = "";
+});
+
+fetch("/api/contenu").then(r => r.json()).then(data => {
+  doc = data;
+  draw();
+}).catch(err => {
+  $("main").innerHTML = `<p>${escapeText(String(err))}</p>`;
+});
+</script>
+</body>
+</html>

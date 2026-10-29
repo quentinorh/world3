@@ -1,0 +1,4 @@
+pygame>=2.5
+numpy>=1.26
+scipy>=1.11
+pyworld3==1.1

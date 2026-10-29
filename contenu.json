@@ -1,0 +1,2549 @@
+{
+  "intro": [
+    {
+      "title": "WORLD3",
+      "lines": [
+        "UN MONDE, PAS UN ANIMAL.",
+        "DE 1900 À 2100, CINQ CHOSES",
+        "LIÉES : LES GENS, LES USINES,",
+        "LES CHAMPS, LE MÉTAL, L'AIR."
+      ]
+    },
+    {
+      "title": "2026",
+      "lines": [
+        "VOUS ARRIVEZ MAINTENANT.",
+        "LE PASSÉ EST DÉJÀ JOUÉ.",
+        "SANS DÉCISION, LA CROISSANCE",
+        "DÉPASSE LE MONDE, PUIS CHUTE."
+      ]
+    },
+    {
+      "title": "LE CONSEIL",
+      "lines": [
+        "TOUS LES DIX ANS,",
+        "LE CONSEIL DE L'HUMANITÉ.",
+        "VOUS ÊTES SEULS À DÉCIDER",
+        "DES ORIENTATIONS."
+      ]
+    },
+    {
+      "title": "TROIS JETONS",
+      "lines": [
+        "CHAQUE CONSEIL EN DONNE TROIS.",
+        "UN NIVEAU COÛTE UN JETON.",
+        "PUIS LES DILEMMES, SANS JETON.",
+        "LA PLANÈTE RÉPOND PLUS TARD."
+      ]
+    },
+    {
+      "title": "LES ANNÉES",
+      "lines": [
+        "ENTRE DEUX CONSEILS,",
+        "LES ANNÉES DÉFILENT.",
+        "UN ÉVÉNEMENT PEUT SURVENIR,",
+        "ENVIRON DEUX FOIS EN DIX ANS,",
+        "JAMAIS PLUS DE TROIS."
+      ]
+    },
+    {
+      "title": "2100",
+      "lines": [
+        "LE MODÈLE S'ARRÊTE EN 2100.",
+        "S'IL N'Y A PLUS RIEN À FAIRE,",
+        "IL RESTE À COMPRENDRE.",
+        "SI LE MONDE TIENT, ON CONTINUE."
+      ]
+    }
+  ],
+  "aide": [
+    "TOUS LES DIX ANS, LE CONSEIL DE L'HUMANITÉ. TROIS JETONS POUR LES ORIENTATIONS, PUIS LES DILEMMES. ENTRE DEUX CONSEILS, LES ANNÉES PASSENT. UN ÉVÉNEMENT PEUT SURVENIR, ENVIRON DEUX FOIS EN DIX ANS, JAMAIS PLUS DE TROIS. LE BOUTON I EXPLIQUE LE SUJET ET SES CONSÉQUENCES.",
+    "",
+    "UN CRAN NE BASCULE PAS LE MONDE L'ANNÉE MÊME. LES MACHINES SE RENOUVELLENT, UNE NORME SE DIFFUSE : L'EFFET S'INSTALLE SUR DIX À DOUZE ANS, SOIT UN CONSEIL. LES CONFLITS VONT PLUS VITE. LES TECHNIQUES QUE LE MONDE APPORTE SE DÉPLOIENT AUSSI SUR DES ANNÉES.",
+    "",
+    "LE RAPPORT MEADOWS, THE LIMITS TO GROWTH, 1972, REPRIS EN 1992 ET EN 2004, RELIE CINQ CHOSES : LES GENS, LES USINES, LES CHAMPS, LE MÉTAL, ET LA POLLUTION.",
+    "",
+    "LES ÉQUATIONS CALCULÉES ICI SONT CELLES DE 1972. LE RÉCIT QUI SUIT REPREND AUSSI LES LIVRES DE 1992 ET DE 2004.",
+    "",
+    "SCÉNARIO DE RÉFÉRENCE",
+    "RIEN NE CHANGE. LA CROISSANCE SUIT SON COURS. LE MÉTAL S'ÉPUISE, LES USINES S'ARRÊTENT, ET L'ON MANQUE À MANGER AU XXIE SIÈCLE.",
+    "",
+    "PLUS DE RESSOURCES",
+    "ON DOUBLE LE MÉTAL, OU UNE TECHNIQUE LE REMPLACE. L'EFFONDREMENT RECULE. IL REVIENT PAR LA POLLUTION : L'AIR SALE ABÎME LES TERRES.",
+    "",
+    "MOINS DE POLLUTION",
+    "CHAQUE OBJET SALE MOINS. LA CHUTE SE DÉPLACE. ELLE VIENT ALORS DES CHAMPS : LE SOL S'USE, LE BLÉ BAISSE.",
+    "",
+    "PLUS DE BLÉ",
+    "LES CHAMPS RENDENT DAVANTAGE. LE SYSTÈME BUTTE ENSUITE SUR LE MÉTAL ET LA POLLUTION, OU SUR LE NOMBRE DE GENS.",
+    "",
+    "TOUTES LES TECHNIQUES",
+    "MÉTAL, AIR ET CHAMPS À LA FOIS. SANS LIMITER LES GENS NI LES USINES, LA CHUTE ARRIVE QUAND MÊME, PLUS TARD. LA CROISSANCE REMPLIT UN MONDE FINI.",
+    "",
+    "LE MONDE STABLE",
+    "LE SEUL QUI TIENT. IL FAUT TOUT ENSEMBLE : AUTANT DE NAISSANCES QUE DE MORTS, DES USINES QUI NE GRANDISSENT PLUS, LE BLÉ ET LES SOINS D'ABORD, MOINS DE MÉTAL ET D'AIR PAR OBJET, ET DES MACHINES QUI DURENT.",
+    "",
+    "L'IDÉE",
+    "LE RAPPORT NE DONNE PAS UNE DATE. LA CROISSANCE DANS UN MONDE FINI DÉPASSE LE SEUIL, PUIS DÉCLINE. SAUF SI PLUSIEURS LEVIERS AGISSENT ENSEMBLE, ET ASSEZ TÔT."
+  ],
+  "credits": [
+    "LES CHIFFRES VIENNENT DE WORLD3, PAS D'UNE RÈGLE INVENTÉE.",
+    "",
+    "DONELLA H. MEADOWS, DENNIS L. MEADOWS, JORGEN RANDERS, WILLIAM W. BEHRENS. THE LIMITS TO GROWTH, 1972.",
+    "",
+    "DENNIS L. MEADOWS ET AL. DYNAMICS OF GROWTH IN A FINITE WORLD, 1974.",
+    "",
+    "MOTEUR : PYWORLD3, CHARLES VANWYNSBERGHE, LICENCE CECILL 2.1. CE JEU APPELLE LA BIBLIOTHÈQUE. IL NE LA RECOPIE PAS. LES ÉQUATIONS SONT CELLES DE 1972.",
+    "",
+    "CONFLITS ET IA SONT HORS DES CINQ SECTEURS. ILS CHANGENT QUAND MÊME LES CHIFFRES.",
+    "",
+    "LES SONS SONT CALCULÉS ICI. CLICS SECS, COURTS, LÉGERS.",
+    "",
+    "LA PLANÈTE EST UN DESSIN. SES COULEURS SUIVENT LA NOURRITURE, LA POLLUTION, LES GENS, ET LE MÉTAL QUI RESTE. LES CALOTTES SONT UNE CARTE. WORLD3 NE CALCULE PAS LE CLIMAT."
+  ],
+  "fin": {
+    "tient": {
+      "title": "LE MONDE TIENT",
+      "lines": [
+        "Plusieurs leviers agissent ensemble. Autant de naissances que de morts, des usines qui ne grandissent plus, moins de métal et d'air par objet.",
+        "Les limites n'ont pas disparu. Elles sont tenues. Le modèle peut continuer après 2100.",
+        "Le gris, sur les courbes, c'est le même monde sans décision."
+      ]
+    },
+    "chute": {
+      "title": "LE MODÈLE S'ARRÊTE",
+      "lines": [
+        "La croissance dans un monde fini dépasse le seuil, puis décline. Un seul levier ne suffit pas.",
+        "Le métal, l'air ou le blé a lâché. Il n'y a plus de conseil. Il reste à comprendre pourquoi.",
+        "Le gris, sur les courbes, c'est le scénario sans décision. La couleur, c'est la partie."
+      ]
+    },
+    "bout": {
+      "title": "LE CALCUL S'ARRÊTE",
+      "lines": [
+        "Le monde tenait encore. Le calcul ne va pas plus loin que cette date.",
+        "Le rapport ne donne pas une année. Il dit qu'un monde fini se tient si plusieurs leviers agissent assez tôt, et ensemble."
+      ]
+    }
+  },
+  "mechanics": [
+    {
+      "id": "foyers",
+      "title": "FAMILLES",
+      "unit": "NORME",
+      "hint": [
+        "NORME, PAS LE NOMBRE D'ENFANTS.",
+        "AU PLUS HAUT, LE SOUHAIT NE PASSE PAS 2."
+      ],
+      "up": "MOINS D'ENFANTS",
+      "down": "PLUS D'ENFANTS",
+      "info": [
+        "Norme de taille de famille, pas le nombre d'enfants réel. Le souhait du modèle est cette norme, tirée par le revenu.",
+        "Au plus haut, le souhait ne passe pas deux : le remplacement, pas moins. Ça ne vide pas les villes l'année du conseil. La population se plie plus tard."
+      ],
+      "curve": "Population",
+      "variable": "dcfsn",
+      "summary": "Norme de taille de famille, pas le nombre d'enfants réel. Le souhait du modèle est cette norme, tirée par le revenu.",
+      "raise_effect": "Monter le cran baisse la norme. La population se plie plus tard, pas l'année du conseil. Au cran 4, le souhait est plafonné à 2.",
+      "lower_effect": "Descendre le cran rapproche la norme de 4, le scénario historique : davantage d'enfants souhaités.",
+      "stack": "Si plusieurs orientations règlent les familles, le cran le plus haut l'emporte.",
+      "levels": [
+        {
+          "shown": "4.0",
+          "note": "4,0 — scénario historique. Le souhait suit le revenu, sans plafond."
+        },
+        {
+          "shown": "3.5",
+          "note": "3,5 — la norme baisse. Un peu moins d'enfants voulus."
+        },
+        {
+          "shown": "3.0",
+          "note": "3,0 — souhait plus bas. L'effet sur la population arrive avec retard."
+        },
+        {
+          "shown": "2.5",
+          "note": "2,5 — proche du seul remplacement des générations."
+        },
+        {
+          "shown": "2.0",
+          "note": "2,0 — plafond : à partir de l'année du cran, le souhait ne repasse plus au-dessus de 2."
+        }
+      ]
+    },
+    {
+      "id": "ateliers",
+      "title": "USINES",
+      "unit": "ANS",
+      "hint": [
+        "COMBIEN D'ANNÉES DURENT LES MACHINES.",
+        "PLUS LONGTEMPS. ON CESSE D'EN AJOUTER."
+      ],
+      "up": "MACHINES PLUS DURABLES",
+      "down": "MACHINES PLUS COURTES",
+      "info": [
+        "Combien d'années durent les machines. Plus le cran monte, plus l'investissement neuf sert à remplacer, et moins à agrandir le stock.",
+        "Les usines cessent de grandir. Moins d'objets neufs, un capital qui se maintient. C'est un des leviers du monde qui tient."
+      ],
+      "curve": "Industrie",
+      "variable": "alic + tenir",
+      "summary": "Durée de vie du capital industriel, et part de l'investissement neuf qui cesse d'agrandir le stock.",
+      "raise_effect": "Les machines durent plus longtemps. Une part croissante de l'investissement ne fait que les remplacer. Au cran 4, les usines cessent de grandir.",
+      "lower_effect": "Les machines durent moins. L'investissement neuf recommence à agrandir le stock d'usines.",
+      "stack": "Si plusieurs orientations règlent les usines, le cran le plus haut l'emporte.",
+      "levels": [
+        {
+          "shown": "14",
+          "note": "14 ans — durée historique. On continue d'ajouter des usines."
+        },
+        {
+          "shown": "17",
+          "note": "17 ans — un quart de l'ajout cesse d'agrandir le stock."
+        },
+        {
+          "shown": "20",
+          "note": "20 ans — la moitié de l'investissement neuf ne fait que remplacer."
+        },
+        {
+          "shown": "24",
+          "note": "24 ans — les trois quarts servent au remplacement."
+        },
+        {
+          "shown": "28",
+          "note": "28 ans — on ne fait plus que remplacer les machines qui meurent."
+        }
+      ]
+    },
+    {
+      "id": "terres",
+      "title": "CHAMPS",
+      "unit": "FOIS",
+      "hint": [
+        "COMBIEN CHAQUE CHAMP PRODUIT.",
+        "PLUS DE BLÉ EN DIX ANS. LE SOL PART."
+      ],
+      "up": "PLUS À MANGER",
+      "down": "ON RELÂCHE LES CHAMPS",
+      "info": [
+        "Combien chaque champ produit. Plus de blé, en dix ans : les pratiques se diffusent. Le cran monte le rendement, il n'efface pas les terres.",
+        "Le récit du rapport dit que forcer le sol l'use. Seul, ce levier bute ensuite sur le métal ou la pollution."
+      ],
+      "curve": "Nourriture",
+      "variable": "lyf",
+      "summary": "Facteur de rendement des terres. Plus de blé, atteint en dix ans. Le cran n'efface pas les terres.",
+      "raise_effect": "Chaque champ produit davantage. Le récit du rapport dit que forcer le sol l'use. Seul, ce levier bute ensuite sur le métal ou l'air.",
+      "lower_effect": "Le rendement redescend vers 1, le scénario historique. Moins de blé, moins de pression sur le sol.",
+      "stack": "Si plusieurs orientations règlent les champs, le cran le plus haut l'emporte. Un événement peut encore multiplier lyf.",
+      "levels": [
+        {
+          "shown": "1.0",
+          "note": "1,0 fois — rendement historique."
+        },
+        {
+          "shown": "1.1",
+          "note": "1,1 — un peu plus de blé, en dix ans."
+        },
+        {
+          "shown": "1.2",
+          "note": "1,2 — encore un cran. Le sol encaisse davantage."
+        },
+        {
+          "shown": "1.6",
+          "note": "1,6 — beaucoup plus de nourriture, et plus de pression sur le sol."
+        },
+        {
+          "shown": "2.0",
+          "note": "2,0 — chaque champ produit deux fois plus. Métal et air arrivent plus vite."
+        }
+      ]
+    },
+    {
+      "id": "rejets",
+      "title": "FUMÉES",
+      "unit": "D'AVANT",
+      "hint": [
+        "POLLUTION POUR CHAQUE OBJET FAIT.",
+        "SI LE MÉTAL ABONDE, LA FAIM PREND LE RELAIS."
+      ],
+      "up": "MOINS DE POLLUTION",
+      "down": "PLUS DE POLLUTION",
+      "info": [
+        "Pollution pour chaque objet fait. Moins par objet. L'air déjà sale reste longtemps : baisser le flux ne vide pas le stock.",
+        "Si le métal abonde, la faim prend souvent le relais. C'est le scénario « moins de pollution »."
+      ],
+      "curve": "Pollution",
+      "variable": "ppgf",
+      "summary": "Pollution générée par objet. Baisser le flux ne vide pas l'air déjà accumulé.",
+      "raise_effect": "Chaque objet salit moins. Si le métal abonde, la faim prend souvent le relais. L'IA peut remultiplier ce facteur.",
+      "lower_effect": "On se rapproche de 100 % d'avant : plus de pollution par objet.",
+      "stack": "Si plusieurs orientations règlent les fumées, le cran le plus haut l'emporte. L'IA et les événements multiplient encore ppgf.",
+      "levels": [
+        {
+          "shown": "100%",
+          "note": "100 % — pollution par objet inchangée."
+        },
+        {
+          "shown": "80%",
+          "note": "80 % — un peu moins de poison par objet."
+        },
+        {
+          "shown": "55%",
+          "note": "55 % — le flux baisse nettement. Le stock d'air déjà sale reste."
+        },
+        {
+          "shown": "35%",
+          "note": "35 % — beaucoup moins par objet."
+        },
+        {
+          "shown": "22%",
+          "note": "22 % — le plus bas. L'air accumulé met du temps à redescendre."
+        }
+      ]
+    },
+    {
+      "id": "filons",
+      "title": "MINES",
+      "unit": "D'AVANT",
+      "hint": [
+        "MÉTAL TIRE PAR PERSONNE.",
+        "MOINS TIRER FAIT DURER LES MINES."
+      ],
+      "up": "ON TIRE MOINS",
+      "down": "ON TIRE PLUS",
+      "info": [
+        "Métal tiré par personne. Moins tirer fait durer les mines. L'industrie peut ralentir si le métal manque.",
+        "L'IA, si elle accélère, multiplie encore ce chiffre. Tirer moins n'est pas découvrir un stock : pour ça, il y a le deep-mining."
+      ],
+      "curve": "Ressources",
+      "variable": "nruf",
+      "summary": "Métal tiré par personne. Moins tirer fait durer les mines. Ce n'est pas un stock découvert.",
+      "raise_effect": "Chaque personne tire moins de métal. Les mines durent. L'industrie peut ralentir si le métal manque. L'IA peut remultiplier ce facteur.",
+      "lower_effect": "On se rapproche de 100 % d'avant : les mines se vident plus vite.",
+      "stack": "Si plusieurs orientations règlent les mines, le cran le plus haut l'emporte. L'IA et les événements multiplient encore nruf.",
+      "levels": [
+        {
+          "shown": "100%",
+          "note": "100 % — métal tiré par personne, scénario historique."
+        },
+        {
+          "shown": "80%",
+          "note": "80 % — les mines durent un peu plus."
+        },
+        {
+          "shown": "60%",
+          "note": "60 % — nettement moins de métal par personne."
+        },
+        {
+          "shown": "45%",
+          "note": "45 % — les réserves se vident beaucoup plus lentement."
+        },
+        {
+          "shown": "30%",
+          "note": "30 % — le plus économe. Découvrir du métal, c'est un événement, pas ce cran."
+        }
+      ]
+    },
+    {
+      "id": "ecoles",
+      "title": "ÉCOLES",
+      "unit": "ANNÉE",
+      "hint": [
+        "ELLE RETIENT LE SOUHAIT SI L'INDUSTRIE TOMBE.",
+        "AUJOURD'HUI, LE REVENU L'A DÉJÀ FAIT."
+      ],
+      "up": "L'ÉCOLE AGIT PLUS TÔT",
+      "down": "L'ÉCOLE AGIT PLUS TARD",
+      "info": [
+        "L'école retient le souhait d'enfants quand l'industrie tombe. En 2026, le revenu a souvent déjà rendu ce contrôle effectif.",
+        "Sans baisser la norme des familles, l'école change peu le présent."
+      ],
+      "curve": "Population",
+      "variable": "fcest",
+      "summary": "Année à partir de laquelle l'école retient le souhait d'enfants quand l'industrie tombe.",
+      "raise_effect": "L'école agit plus tôt. En 2026 le revenu a souvent déjà cet effet : sans baisser la norme des familles, le présent bouge peu.",
+      "lower_effect": "L'école agit plus tard. Au cran 0, elle n'agit pas dans l'horizon du modèle.",
+      "stack": "Si plusieurs orientations règlent l'école, le cran le plus haut l'emporte.",
+      "levels": [
+        {
+          "shown": "NON",
+          "note": "NON — année 4000 : l'école ne change rien d'ici 2100."
+        },
+        {
+          "shown": "2080",
+          "note": "2080 — elle commence tard, si l'industrie est déjà tombée."
+        },
+        {
+          "shown": "2060",
+          "note": "2060 — le frein arrive au milieu du siècle."
+        },
+        {
+          "shown": "2040",
+          "note": "2040 — elle agit avant la moitié de la partie."
+        },
+        {
+          "shown": "2026",
+          "note": "2026 — dès maintenant. Le revenu a souvent déjà rendu ce contrôle effectif."
+        }
+      ]
+    },
+    {
+      "id": "partage",
+      "title": "SERVICES",
+      "unit": "EN MOINS",
+      "hint": [
+        "MOINS POUR LES USINES NEUVES.",
+        "PLUS POUR LES SOINS. LE BLÉ RESTE."
+      ],
+      "up": "PLUS POUR LES SOINS",
+      "down": "MOINS POUR LES SOINS",
+      "info": [
+        "Moins pour les usines neuves, plus pour les soins. La part des champs n'est pas la variable : si la place manque, on réduit l'ajout, pas l'agriculture.",
+        "Le blé reste. Le capital industriel nouveau, lui, cède."
+      ],
+      "curve": "Population",
+      "variable": "fioas + fioac",
+      "summary": "Part retirée aux usines neuves. La moitié va aux soins, l'autre à la consommation. La part des champs n'est pas la variable.",
+      "raise_effect": "Moins de capital pour les usines neuves, plus pour les soins. Si la place manque, on réduit cet ajout, pas l'agriculture.",
+      "lower_effect": "La part revient aux usines neuves. Moins pour les soins.",
+      "stack": "Si plusieurs orientations règlent les services, le cran le plus haut l'emporte.",
+      "levels": [
+        {
+          "shown": "0%",
+          "note": "0 % — toute la part industrielle reste aux usines neuves."
+        },
+        {
+          "shown": "5%",
+          "note": "5 % — un peu moins pour les usines, moitié soins, moitié consommation."
+        },
+        {
+          "shown": "9%",
+          "note": "9 % — le capital nouveau cède davantage."
+        },
+        {
+          "shown": "14%",
+          "note": "14 % — les soins prennent une part nette. Le blé reste."
+        },
+        {
+          "shown": "18%",
+          "note": "18 % — le plus haut. On réduit l'ajout si la place manque, pas les champs."
+        }
+      ]
+    },
+    {
+      "id": "technique",
+      "title": "OUTILS",
+      "unit": "PAR BIEN",
+      "hint": [
+        "MOINS DE MACHINES POUR LE MÊME OBJET.",
+        "PLUS D'OBJETS. LES LIMITES ARRIVENT PLUS VITE."
+      ],
+      "up": "MOINS DE MACHINES",
+      "down": "PLUS DE MACHINES",
+      "info": [
+        "Moins de machines pour le même objet. Plus d'objets. Les limites arrivent plus vite, parce que la production accélère.",
+        "Le nombre de satellites autour de la planète suit ce cran."
+      ],
+      "curve": "Industrie",
+      "variable": "icor",
+      "summary": "Capital industriel par objet. Moins de machines pour le même bien, donc plus d'objets. Les satellites suivent ce cran.",
+      "raise_effect": "Plus d'objets pour le même capital. Les limites arrivent plus tôt. Le nombre de satellites passe de 8 à 64. L'IA peut encore baisser ce besoin.",
+      "lower_effect": "Il faut plus de machines par objet. Moins d'objets, et moins de satellites.",
+      "stack": "Si plusieurs orientations règlent les outils, le cran le plus haut l'emporte. L'IA multiplie encore icor.",
+      "levels": [
+        {
+          "shown": "3.0",
+          "note": "3,0 par bien — historique. 8 satellites."
+        },
+        {
+          "shown": "2.7",
+          "note": "2,7 — un peu plus d'objets. 16 satellites."
+        },
+        {
+          "shown": "2.4",
+          "note": "2,4 — la production accélère. 28 satellites."
+        },
+        {
+          "shown": "2.1",
+          "note": "2,1 — encore moins de machines par objet. 44 satellites."
+        },
+        {
+          "shown": "1.8",
+          "note": "1,8 — le plus efficace. 64 satellites. Les limites arrivent plus vite."
+        }
+      ]
+    },
+    {
+      "id": "conflits",
+      "title": "CONFLITS",
+      "unit": "ACTIF",
+      "hint": [
+        "HORS DES CINQ SECTEURS DE WORLD3.",
+        "PLUS DE CONFLIT : MOINS D'OBJETS FAITS."
+      ],
+      "up": "PLUS DE CONFLIT",
+      "down": "MOINS DE CONFLIT",
+      "info": [
+        "Hors des cinq secteurs de World3. Plus de conflit, moins d'usines au travail, moins d'objets faits.",
+        "Ce n'est pas une sobriété choisie. C'est une part du capital qui ne produit plus."
+      ],
+      "curve": "Industrie",
+      "variable": "cuf",
+      "summary": "Part du capital encore au travail. Hors des cinq secteurs de World3 : une part des usines ne produit plus.",
+      "raise_effect": "Plus de conflit, moins d'objets. Ce n'est pas une sobriété choisie : le capital est détourné.",
+      "lower_effect": "Une plus grande part des usines se remet au travail. On se rapproche de 100 %.",
+      "stack": "Si plusieurs orientations règlent les conflits, le cran le plus haut l'emporte. Un événement peut encore multiplier cuf.",
+      "levels": [
+        {
+          "shown": "100%",
+          "note": "100 % actif — pas de conflit. Tout le capital produit."
+        },
+        {
+          "shown": "95%",
+          "note": "95 % — une petite part des usines s'arrête."
+        },
+        {
+          "shown": "88%",
+          "note": "88 % — moins d'objets, sans choix de sobriété."
+        },
+        {
+          "shown": "78%",
+          "note": "78 % — une part nette du capital ne produit plus."
+        },
+        {
+          "shown": "65%",
+          "note": "65 % — le plus haut. Beaucoup d'usines sont hors travail."
+        }
+      ]
+    },
+    {
+      "id": "ia",
+      "title": "IA",
+      "unit": "D'OBJETS",
+      "hint": [
+        "HORS DES CINQ SECTEURS DE WORLD3.",
+        "PLUS D'OBJETS, PLUS DE MÉTAL ET D'AIR."
+      ],
+      "up": "L'IA VA PLUS VITE",
+      "down": "L'IA RALENTIT",
+      "info": [
+        "Hors des cinq secteurs de World3. Plus d'objets, et en même temps plus de métal tiré et plus d'air sale.",
+        "L'IA accélère la croissance. Elle ne lève pas les limites, elle les atteint plus tôt."
+      ],
+      "curve": "Industrie",
+      "variable": "icor × charge",
+      "summary": "Hors des cinq secteurs de World3. Plus d'objets par machine, et en même temps plus de métal tiré et plus de pollution.",
+      "raise_effect": "Les machines font plus d'objets (icor baisse) et la charge sur les mines et l'air monte. L'IA atteint les limites plus tôt, elle ne les lève pas.",
+      "lower_effect": "L'accélération retombe. Moins d'objets, et moins de charge sur le métal et l'air.",
+      "stack": "Si plusieurs orientations règlent l'IA, le cran le plus haut l'emporte. Cette charge s'ajoute aux orientations Outils, Mines et Fumées.",
+      "levels": [
+        {
+          "shown": "X1.0",
+          "note": "×1,0 — pas d'accélération. Métal et air × 1,00."
+        },
+        {
+          "shown": "X1.1",
+          "note": "×1,1 — icor × 0,92. Métal et pollution × 1,08."
+        },
+        {
+          "shown": "X1.2",
+          "note": "×1,2 — icor × 0,84. Métal et pollution × 1,18."
+        },
+        {
+          "shown": "X1.3",
+          "note": "×1,3 — icor × 0,76. Métal et pollution × 1,30."
+        },
+        {
+          "shown": "X1.5",
+          "note": "×1,5 — icor × 0,68. Métal et pollution × 1,45."
+        }
+      ]
+    }
+  ],
+  "fx_help": [
+    {
+      "key": "lyf",
+      "group": "durable",
+      "label": "Rendement des terres",
+      "neutral": 1,
+      "mode": "mul",
+      "effect": "Multiplie lyf, ce que chaque champ produit. S'ajoute à l'orientation Champs. Reste entre 0,45 et 2,4."
+    },
+    {
+      "key": "ppgf",
+      "group": "durable",
+      "label": "Pollution par objet",
+      "neutral": 1,
+      "mode": "mul",
+      "effect": "Multiplie ppgf. Au-dessus de 1, l'air se charge plus vite. S'ajoute aux Fumées et à la charge de l'IA. Reste entre 0,20 et 3."
+    },
+    {
+      "key": "nruf",
+      "group": "durable",
+      "label": "Métal tiré par personne",
+      "neutral": 1,
+      "mode": "mul",
+      "effect": "Multiplie nruf. Au-dessus de 1, les mines se vident plus vite. S'ajoute aux Mines et à la charge de l'IA. Reste entre 0,15 et 3."
+    },
+    {
+      "key": "alic",
+      "group": "durable",
+      "label": "Durée des machines",
+      "neutral": 1,
+      "mode": "mul",
+      "effect": "Multiplie alic, la durée de vie du capital. Au-dessus de 1, les machines durent plus. Reste entre 8 et 40 ans."
+    },
+    {
+      "key": "icor",
+      "group": "durable",
+      "label": "Machines par objet",
+      "neutral": 1,
+      "mode": "mul",
+      "effect": "Multiplie icor. En dessous de 1, le même capital fait plus d'objets. S'ajoute aux Outils et à l'IA. Reste entre 0,90 et 6."
+    },
+    {
+      "key": "cuf",
+      "group": "durable",
+      "label": "Usines au travail",
+      "neutral": 1,
+      "mode": "mul",
+      "effect": "Multiplie la part du capital encore au travail. En dessous de 1, des usines s'arrêtent. Reste entre 0,35 et 1."
+    },
+    {
+      "key": "dcfs",
+      "group": "durable",
+      "label": "Enfants souhaités",
+      "neutral": 1,
+      "mode": "mul",
+      "effect": "Multiplie la norme de famille (dcfsn), avant le plafond du cran 4. Reste entre 1,6 et 6,5."
+    },
+    {
+      "key": "mort",
+      "group": "durable",
+      "label": "Mortalité",
+      "neutral": 1,
+      "mode": "mul",
+      "effect": "Multiplie les décès, chaque année à partir de l'événement. Au-dessus de 1, on meurt davantage. Reste entre 0,55 et 1,5."
+    },
+    {
+      "key": "fcaor_add",
+      "group": "durable",
+      "label": "Capital détourné vers l'extraction",
+      "neutral": 0,
+      "mode": "add",
+      "effect": "Ajoute cette part du capital industriel à l'extraction du métal (fcaor). 0,08 : 8 % des usines creusent au lieu de produire. Monte avec la rampe. Ne dépasse pas 95 %."
+    },
+    {
+      "key": "pop_keep",
+      "group": "choc",
+      "label": "Population restante",
+      "neutral": 1,
+      "mode": "keep",
+      "effect": "Une seule fois, l'année de l'événement. 0,88 laisse 88 % des gens."
+    },
+    {
+      "key": "nr_keep",
+      "group": "choc",
+      "label": "Métal restant",
+      "neutral": 1,
+      "mode": "keep",
+      "effect": "Une seule fois. Part du métal encore en terre après le choc. Ne dépasse pas le stock connu."
+    },
+    {
+      "key": "al_keep",
+      "group": "choc",
+      "label": "Terres restantes",
+      "neutral": 1,
+      "mode": "keep",
+      "effect": "Une seule fois. Part des terres cultivées qui restent. 0,94 en retire 6 %."
+    },
+    {
+      "key": "ic_keep",
+      "group": "choc",
+      "label": "Usines restantes",
+      "neutral": 1,
+      "mode": "keep",
+      "effect": "Une seule fois. Part du capital industriel qui reste debout."
+    },
+    {
+      "key": "ppolx_add",
+      "group": "choc",
+      "label": "Pollution ajoutée",
+      "neutral": 0,
+      "mode": "add",
+      "effect": "Une seule fois. Ajoute cette fraction du niveau de pollution de 1970. 0 n'ajoute rien."
+    },
+    {
+      "key": "nri_add",
+      "group": "choc",
+      "label": "Métal découvert",
+      "neutral": 0,
+      "mode": "add",
+      "effect": "Une seule fois. Ajoute cette fraction du stock d'origine. 1 équivaut à un second stock initial. Les usines peuvent repartir, l'air suit."
+    },
+    {
+      "key": "ramp",
+      "group": "choc",
+      "label": "Montée en puissance",
+      "neutral": 0,
+      "mode": "years",
+      "effect": "Années pour que les multiplicateurs durables et le métal découvert atteignent leur plein effet, en ligne droite depuis l'année de l'événement. 0 : effet plein l'année même. Les chocs de stock (gens, terres, usines, pollution ajoutée) restent instantanés."
+    }
+  ],
+  "themes": [
+    {
+      "id": "metal",
+      "label": "Métal",
+      "effect": "La carte parle des mines. Si une autre limite serre, la fourche de cette limite remplace le dilemme."
+    },
+    {
+      "id": "pollution",
+      "label": "Pollution",
+      "effect": "La carte parle de l'air. Une autre limite qui serre ouvre la fourche correspondante."
+    },
+    {
+      "id": "essor",
+      "label": "Essor",
+      "effect": "La carte parle des usines qui grandissent. La fourche suit la limite qui serre vraiment."
+    },
+    {
+      "id": "sol",
+      "label": "Sol",
+      "effect": "La carte parle des champs. La fourche prend le relais si une autre limite serre."
+    },
+    {
+      "id": "faim",
+      "label": "Faim",
+      "effect": "La carte parle du manque à manger. La fourche suit la limite réelle."
+    },
+    {
+      "id": "calme",
+      "label": "Calme",
+      "effect": "Aucune limite ne domine. Le dilemme daté reste affiché."
+    }
+  ],
+  "orientations": [
+    {
+      "id": "foyers",
+      "kind": "foyers",
+      "title": "FAMILLES",
+      "hint": [
+        "NORME, PAS LE NOMBRE D'ENFANTS.",
+        "AU PLUS HAUT, LE SOUHAIT NE PASSE PAS 2."
+      ],
+      "unit": "NORME",
+      "up": "MOINS D'ENFANTS",
+      "down": "PLUS D'ENFANTS",
+      "info": [
+        "Norme de taille de famille, pas le nombre d'enfants réel. Le souhait du modèle est cette norme, tirée par le revenu.",
+        "Au plus haut, le souhait ne passe pas deux : le remplacement, pas moins. Ça ne vide pas les villes l'année du conseil. La population se plie plus tard."
+      ],
+      "series": "pop",
+      "levels": [
+        {
+          "shown": "4.0",
+          "note": "4,0 — scénario historique. Le souhait suit le revenu, sans plafond."
+        },
+        {
+          "shown": "3.5",
+          "note": "3,5 — la norme baisse. Un peu moins d'enfants voulus."
+        },
+        {
+          "shown": "3.0",
+          "note": "3,0 — souhait plus bas. L'effet sur la population arrive avec retard."
+        },
+        {
+          "shown": "2.5",
+          "note": "2,5 — proche du seul remplacement des générations."
+        },
+        {
+          "shown": "2.0",
+          "note": "2,0 — plafond : à partir de l'année du cran, le souhait ne repasse plus au-dessus de 2."
+        }
+      ]
+    },
+    {
+      "id": "ateliers",
+      "kind": "ateliers",
+      "title": "USINES",
+      "hint": [
+        "COMBIEN D'ANNÉES DURENT LES MACHINES.",
+        "PLUS LONGTEMPS. ON CESSE D'EN AJOUTER."
+      ],
+      "unit": "ANS",
+      "up": "MACHINES PLUS DURABLES",
+      "down": "MACHINES PLUS COURTES",
+      "info": [
+        "Combien d'années durent les machines. Plus le cran monte, plus l'investissement neuf sert à remplacer, et moins à agrandir le stock.",
+        "Les usines cessent de grandir. Moins d'objets neufs, un capital qui se maintient. C'est un des leviers du monde qui tient."
+      ],
+      "series": "iopc",
+      "levels": [
+        {
+          "shown": "14",
+          "note": "14 ans — durée historique. On continue d'ajouter des usines."
+        },
+        {
+          "shown": "17",
+          "note": "17 ans — un quart de l'ajout cesse d'agrandir le stock."
+        },
+        {
+          "shown": "20",
+          "note": "20 ans — la moitié de l'investissement neuf ne fait que remplacer."
+        },
+        {
+          "shown": "24",
+          "note": "24 ans — les trois quarts servent au remplacement."
+        },
+        {
+          "shown": "28",
+          "note": "28 ans — on ne fait plus que remplacer les machines qui meurent."
+        }
+      ]
+    },
+    {
+      "id": "terres",
+      "kind": "terres",
+      "title": "CHAMPS",
+      "hint": [
+        "COMBIEN CHAQUE CHAMP PRODUIT.",
+        "PLUS DE BLÉ EN DIX ANS. LE SOL PART."
+      ],
+      "unit": "FOIS",
+      "up": "PLUS À MANGER",
+      "down": "ON RELÂCHE LES CHAMPS",
+      "info": [
+        "Combien chaque champ produit. Plus de blé, en dix ans : les pratiques se diffusent. Le cran monte le rendement, il n'efface pas les terres.",
+        "Le récit du rapport dit que forcer le sol l'use. Seul, ce levier bute ensuite sur le métal ou la pollution."
+      ],
+      "series": "fpc",
+      "levels": [
+        {
+          "shown": "1.0",
+          "note": "1,0 fois — rendement historique."
+        },
+        {
+          "shown": "1.1",
+          "note": "1,1 — un peu plus de blé, en dix ans."
+        },
+        {
+          "shown": "1.2",
+          "note": "1,2 — encore un cran. Le sol encaisse davantage."
+        },
+        {
+          "shown": "1.6",
+          "note": "1,6 — beaucoup plus de nourriture, et plus de pression sur le sol."
+        },
+        {
+          "shown": "2.0",
+          "note": "2,0 — chaque champ produit deux fois plus. Métal et air arrivent plus vite."
+        }
+      ]
+    },
+    {
+      "id": "rejets",
+      "kind": "rejets",
+      "title": "FUMÉES",
+      "hint": [
+        "POLLUTION POUR CHAQUE OBJET FAIT.",
+        "SI LE MÉTAL ABONDE, LA FAIM PREND LE RELAIS."
+      ],
+      "unit": "D'AVANT",
+      "up": "MOINS DE POLLUTION",
+      "down": "PLUS DE POLLUTION",
+      "info": [
+        "Pollution pour chaque objet fait. Moins par objet. L'air déjà sale reste longtemps : baisser le flux ne vide pas le stock.",
+        "Si le métal abonde, la faim prend souvent le relais. C'est le scénario « moins de pollution »."
+      ],
+      "series": "ppolx",
+      "levels": [
+        {
+          "shown": "100%",
+          "note": "100 % — pollution par objet inchangée."
+        },
+        {
+          "shown": "80%",
+          "note": "80 % — un peu moins de poison par objet."
+        },
+        {
+          "shown": "55%",
+          "note": "55 % — le flux baisse nettement. Le stock d'air déjà sale reste."
+        },
+        {
+          "shown": "35%",
+          "note": "35 % — beaucoup moins par objet."
+        },
+        {
+          "shown": "22%",
+          "note": "22 % — le plus bas. L'air accumulé met du temps à redescendre."
+        }
+      ]
+    },
+    {
+      "id": "filons",
+      "kind": "filons",
+      "title": "MINES",
+      "hint": [
+        "MÉTAL TIRE PAR PERSONNE.",
+        "MOINS TIRER FAIT DURER LES MINES."
+      ],
+      "unit": "D'AVANT",
+      "up": "ON TIRE MOINS",
+      "down": "ON TIRE PLUS",
+      "info": [
+        "Métal tiré par personne. Moins tirer fait durer les mines. L'industrie peut ralentir si le métal manque.",
+        "L'IA, si elle accélère, multiplie encore ce chiffre. Tirer moins n'est pas découvrir un stock : pour ça, il y a le deep-mining."
+      ],
+      "series": "nrfr",
+      "levels": [
+        {
+          "shown": "100%",
+          "note": "100 % — métal tiré par personne, scénario historique."
+        },
+        {
+          "shown": "80%",
+          "note": "80 % — les mines durent un peu plus."
+        },
+        {
+          "shown": "60%",
+          "note": "60 % — nettement moins de métal par personne."
+        },
+        {
+          "shown": "45%",
+          "note": "45 % — les réserves se vident beaucoup plus lentement."
+        },
+        {
+          "shown": "30%",
+          "note": "30 % — le plus économe. Découvrir du métal, c'est un événement, pas ce cran."
+        }
+      ]
+    },
+    {
+      "id": "ecoles",
+      "kind": "ecoles",
+      "title": "ÉCOLES",
+      "hint": [
+        "ELLE RETIENT LE SOUHAIT SI L'INDUSTRIE TOMBE.",
+        "AUJOURD'HUI, LE REVENU L'A DÉJÀ FAIT."
+      ],
+      "unit": "ANNÉE",
+      "up": "L'ÉCOLE AGIT PLUS TÔT",
+      "down": "L'ÉCOLE AGIT PLUS TARD",
+      "info": [
+        "L'école retient le souhait d'enfants quand l'industrie tombe. En 2026, le revenu a souvent déjà rendu ce contrôle effectif.",
+        "Sans baisser la norme des familles, l'école change peu le présent."
+      ],
+      "series": "pop",
+      "levels": [
+        {
+          "shown": "NON",
+          "note": "NON — année 4000 : l'école ne change rien d'ici 2100."
+        },
+        {
+          "shown": "2080",
+          "note": "2080 — elle commence tard, si l'industrie est déjà tombée."
+        },
+        {
+          "shown": "2060",
+          "note": "2060 — le frein arrive au milieu du siècle."
+        },
+        {
+          "shown": "2040",
+          "note": "2040 — elle agit avant la moitié de la partie."
+        },
+        {
+          "shown": "2026",
+          "note": "2026 — dès maintenant. Le revenu a souvent déjà rendu ce contrôle effectif."
+        }
+      ]
+    },
+    {
+      "id": "partage",
+      "kind": "partage",
+      "title": "SERVICES",
+      "hint": [
+        "MOINS POUR LES USINES NEUVES.",
+        "PLUS POUR LES SOINS. LE BLÉ RESTE."
+      ],
+      "unit": "EN MOINS",
+      "up": "PLUS POUR LES SOINS",
+      "down": "MOINS POUR LES SOINS",
+      "info": [
+        "Moins pour les usines neuves, plus pour les soins. La part des champs n'est pas la variable : si la place manque, on réduit l'ajout, pas l'agriculture.",
+        "Le blé reste. Le capital industriel nouveau, lui, cède."
+      ],
+      "series": "pop",
+      "levels": [
+        {
+          "shown": "0%",
+          "note": "0 % — toute la part industrielle reste aux usines neuves."
+        },
+        {
+          "shown": "5%",
+          "note": "5 % — un peu moins pour les usines, moitié soins, moitié consommation."
+        },
+        {
+          "shown": "9%",
+          "note": "9 % — le capital nouveau cède davantage."
+        },
+        {
+          "shown": "14%",
+          "note": "14 % — les soins prennent une part nette. Le blé reste."
+        },
+        {
+          "shown": "18%",
+          "note": "18 % — le plus haut. On réduit l'ajout si la place manque, pas les champs."
+        }
+      ]
+    },
+    {
+      "id": "technique",
+      "kind": "technique",
+      "title": "OUTILS",
+      "hint": [
+        "MOINS DE MACHINES POUR LE MÊME OBJET.",
+        "PLUS D'OBJETS. LES LIMITES ARRIVENT PLUS VITE."
+      ],
+      "unit": "PAR BIEN",
+      "up": "MOINS DE MACHINES",
+      "down": "PLUS DE MACHINES",
+      "info": [
+        "Moins de machines pour le même objet. Plus d'objets. Les limites arrivent plus vite, parce que la production accélère.",
+        "Le nombre de satellites autour de la planète suit ce cran."
+      ],
+      "series": "iopc",
+      "levels": [
+        {
+          "shown": "3.0",
+          "note": "3,0 par bien — historique. 8 satellites."
+        },
+        {
+          "shown": "2.7",
+          "note": "2,7 — un peu plus d'objets. 16 satellites."
+        },
+        {
+          "shown": "2.4",
+          "note": "2,4 — la production accélère. 28 satellites."
+        },
+        {
+          "shown": "2.1",
+          "note": "2,1 — encore moins de machines par objet. 44 satellites."
+        },
+        {
+          "shown": "1.8",
+          "note": "1,8 — le plus efficace. 64 satellites. Les limites arrivent plus vite."
+        }
+      ]
+    },
+    {
+      "id": "conflits",
+      "kind": "conflits",
+      "title": "CONFLITS",
+      "hint": [
+        "HORS DES CINQ SECTEURS DE WORLD3.",
+        "PLUS DE CONFLIT : MOINS D'OBJETS FAITS."
+      ],
+      "unit": "ACTIF",
+      "up": "PLUS DE CONFLIT",
+      "down": "MOINS DE CONFLIT",
+      "info": [
+        "Hors des cinq secteurs de World3. Plus de conflit, moins d'usines au travail, moins d'objets faits.",
+        "Ce n'est pas une sobriété choisie. C'est une part du capital qui ne produit plus."
+      ],
+      "series": "iopc",
+      "levels": [
+        {
+          "shown": "100%",
+          "note": "100 % actif — pas de conflit. Tout le capital produit."
+        },
+        {
+          "shown": "95%",
+          "note": "95 % — une petite part des usines s'arrête."
+        },
+        {
+          "shown": "88%",
+          "note": "88 % — moins d'objets, sans choix de sobriété."
+        },
+        {
+          "shown": "78%",
+          "note": "78 % — une part nette du capital ne produit plus."
+        },
+        {
+          "shown": "65%",
+          "note": "65 % — le plus haut. Beaucoup d'usines sont hors travail."
+        }
+      ]
+    },
+    {
+      "id": "ia",
+      "kind": "ia",
+      "title": "IA",
+      "hint": [
+        "HORS DES CINQ SECTEURS DE WORLD3.",
+        "PLUS D'OBJETS, PLUS DE MÉTAL ET D'AIR."
+      ],
+      "unit": "D'OBJETS",
+      "up": "L'IA VA PLUS VITE",
+      "down": "L'IA RALENTIT",
+      "info": [
+        "Hors des cinq secteurs de World3. Plus d'objets, et en même temps plus de métal tiré et plus d'air sale.",
+        "L'IA accélère la croissance. Elle ne lève pas les limites, elle les atteint plus tôt."
+      ],
+      "series": "iopc",
+      "levels": [
+        {
+          "shown": "X1.0",
+          "note": "×1,0 — pas d'accélération. Métal et air × 1,00."
+        },
+        {
+          "shown": "X1.1",
+          "note": "×1,1 — icor × 0,92. Métal et pollution × 1,08."
+        },
+        {
+          "shown": "X1.2",
+          "note": "×1,2 — icor × 0,84. Métal et pollution × 1,18."
+        },
+        {
+          "shown": "X1.3",
+          "note": "×1,3 — icor × 0,76. Métal et pollution × 1,30."
+        },
+        {
+          "shown": "X1.5",
+          "note": "×1,5 — icor × 0,68. Métal et pollution × 1,45."
+        }
+      ]
+    }
+  ],
+  "dilemmas": [
+    {
+      "id": "greniers",
+      "year": 2030,
+      "theme": "metal",
+      "live_only": false,
+      "title": "LE MÉTAL",
+      "lines": [
+        "LE MÉTAL VA MANQUER.",
+        "LE DEEP-MINING, OU EN TIRER MOINS."
+      ],
+      "info": [
+        "Le deep-mining va chercher le métal très profond, sous terre ou sous la mer, là où les mines d'aujourd'hui ne vont pas.",
+        "On gagne un cinquième de stock, étalé sur quinze ans : le temps de construire. En échange, 8 % du capital industriel creuse au lieu de produire. Les usines tiennent plus longtemps. Le rapport appelle cela « plus de ressources » : l'effondrement recule.",
+        "Il revient ensuite par la pollution. L'air sale abîme les terres, et l'on manque à manger. Creuser coûte de l'énergie, abîme les fonds, et ne rend pas le monde plus grand.",
+        "L'autre voie tire moins de métal par personne. Les mines durent. L'industrie ralentit plus tôt. Dans les deux cas, l'effet s'installe sur une douzaine d'années."
+      ],
+      "a": {
+        "label": "DEEP-MINING",
+        "law": null,
+        "delta": 0,
+        "sub": "PLUS DE MÉTAL, LENTEMENT. ÇA COÛTE",
+        "shock": "filons"
+      },
+      "b": {
+        "label": "GARDER",
+        "law": 4,
+        "delta": 1,
+        "sub": "MOINS DE MÉTAL PAR PERSONNE",
+        "shock": null
+      }
+    },
+    {
+      "id": "conflit",
+      "year": 2030,
+      "theme": "essor",
+      "live_only": false,
+      "title": "LES USINES",
+      "lines": [
+        "LES USINES VEULENT GRANDIR.",
+        "GARDER LE MÉTAL, OU ALLER VITE."
+      ],
+      "info": [
+        "Les usines veulent encore grandir. Garder le métal ralentit la ponction. Aller vite fait plus d'objets, et use davantage le métal et l'air.",
+        "Aucune des deux voies n'agrandit la planète. L'une retarde la pénurie, l'autre avance la croissance."
+      ],
+      "a": {
+        "label": "GARDER",
+        "law": 4,
+        "delta": 1,
+        "sub": "MOINS DE MÉTAL PAR PERSONNE",
+        "shock": null
+      },
+      "b": {
+        "label": "VITE",
+        "law": 9,
+        "delta": 1,
+        "sub": "PLUS D'OBJETS, PLUS DE DÉGÂTS",
+        "shock": null
+      }
+    },
+    {
+      "id": "fumee",
+      "year": 2040,
+      "theme": "pollution",
+      "live_only": false,
+      "title": "L'AIR",
+      "lines": [
+        "L'AIR SALE ABÎME LES TERRES.",
+        "FILTRER, OU POUSSER LES CHAMPS."
+      ],
+      "info": [
+        "L'air déjà sale reste longtemps. Filtrer, c'est moins de pollution par objet. Pousser les champs, c'est plus de blé en dix ans, et un sol qu'on force.",
+        "Dans le rapport, moins de pollution déplace la chute : elle revient souvent par les terres."
+      ],
+      "a": {
+        "label": "FILTRER",
+        "law": 3,
+        "delta": 1,
+        "sub": "MOINS DE POISON PAR OBJET",
+        "shock": null
+      },
+      "b": {
+        "label": "CHAMPS",
+        "law": 2,
+        "delta": 1,
+        "sub": "PLUS DE BLÉ. LE SOL S'USE",
+        "shock": null
+      }
+    },
+    {
+      "id": "machines",
+      "year": 2040,
+      "theme": "essor",
+      "live_only": false,
+      "title": "L'IA",
+      "lines": [
+        "L'IA FAIT TOURNER LES USINES.",
+        "ELLE POLLUE ET CREUSE AUSSI."
+      ],
+      "info": [
+        "L'IA fait plus d'objets avec les mêmes machines. Elle tire aussi plus de métal et salit plus l'air. Ce n'est pas un des cinq secteurs de 1972 : le jeu l'ajoute.",
+        "Freiner garde le rythme d'avant. Accélérer remplit plus vite un monde fini."
+      ],
+      "a": {
+        "label": "FREINER",
+        "law": 9,
+        "delta": -1,
+        "sub": "ON GARDE LE RYTHME D'AVANT",
+        "shock": null
+      },
+      "b": {
+        "label": "PLUS VITE",
+        "law": 9,
+        "delta": 1,
+        "sub": "PLUS D'OBJETS, PLUS DE DÉGÂTS",
+        "shock": null
+      }
+    },
+    {
+      "id": "filon",
+      "year": 2050,
+      "theme": "metal",
+      "live_only": false,
+      "title": "LE MÉTAL",
+      "lines": [
+        "LE MÉTAL DEVIENT CHER.",
+        "EN GARDER, OU CREUSER PLUS."
+      ],
+      "info": [
+        "Le métal devient cher parce que les mines baissent. En garder, c'est moins par personne. Creuser plus vide le stock plus vite.",
+        "Ce n'est pas le deep-mining : on ne découvre pas un stock neuf, on décide seulement à quel rythme puiser celui qui reste."
+      ],
+      "a": {
+        "label": "GARDER",
+        "law": 4,
+        "delta": 1,
+        "sub": "MOINS DE MÉTAL PAR PERSONNE",
+        "shock": null
+      },
+      "b": {
+        "label": "CREUSER",
+        "law": 4,
+        "delta": -1,
+        "sub": "ON VIDE LES MINES PLUS VITE",
+        "shock": null
+      }
+    },
+    {
+      "id": "assiettes",
+      "year": 2050,
+      "theme": "faim",
+      "live_only": true,
+      "title": "L'ASSIETTE",
+      "lines": [
+        "ON MANGE MOINS BIEN.",
+        "MOINS D'ENFANTS, OU PLUS DE CHAMPS."
+      ],
+      "info": [
+        "On mange moins bien. Moins d'enfants voulus allège le monde plus tard, pas ce soir. Plus de champs donne du blé en dix ans, et use le sol.",
+        "La faim, dans le modèle, vient souvent après l'industrie : quand les usines tombent, les champs suivent."
+      ],
+      "a": {
+        "label": "ENFANTS",
+        "law": 0,
+        "delta": 1,
+        "sub": "MOINS DE BOUCHES, PLUS TARD",
+        "shock": null
+      },
+      "b": {
+        "label": "CHAMPS",
+        "law": 2,
+        "delta": 1,
+        "sub": "PLUS DE BLÉ. LE SOL S'USE",
+        "shock": null
+      }
+    },
+    {
+      "id": "age",
+      "year": 2060,
+      "theme": "faim",
+      "live_only": false,
+      "title": "LES GENS",
+      "lines": [
+        "LES GENS RESTENT TROP NOMBREUX.",
+        "VISER DEUX, OU REMETTRE À PLUS TARD."
+      ],
+      "info": [
+        "La population reste haute parce que les naissances d'avant sont déjà là. Viser deux, c'est la norme de remplacement. Remettre à plus tard laisse le souhait haut.",
+        "Le nombre de gens ne baisse pas l'année du conseil. Il se plie avec retard."
+      ],
+      "a": {
+        "label": "DEUX",
+        "law": 0,
+        "delta": 1,
+        "sub": "MOINS D'ENFANTS VOULUS",
+        "shock": null
+      },
+      "b": {
+        "label": "PLUS TARD",
+        "law": 0,
+        "delta": -1,
+        "sub": "PLUS D'ENFANTS MAINTENANT",
+        "shock": null
+      }
+    },
+    {
+      "id": "ecole",
+      "year": 2060,
+      "theme": "calme",
+      "live_only": true,
+      "title": "L'ÉCOLE",
+      "lines": [
+        "LE SOUHAIT TIENT ENCORE",
+        "SI L'INDUSTRIE TOMBE."
+      ],
+      "info": [
+        "L'école rend le souhait d'enfants plus réel quand l'industrie tombe. En 2026, le revenu a souvent déjà fait ce travail : le cran change peu le présent.",
+        "Sans baisser la norme, l'école ne suffit pas."
+      ],
+      "a": {
+        "label": "OUVRIR",
+        "law": 5,
+        "delta": 1,
+        "sub": "L'ÉCOLE AGIT PLUS TÔT",
+        "shock": null
+      },
+      "b": {
+        "label": "ATTENDRE",
+        "law": 5,
+        "delta": -1,
+        "sub": "ON LAISSE POUR PLUS TARD",
+        "shock": null
+      }
+    },
+    {
+      "id": "sol",
+      "year": 2070,
+      "theme": "sol",
+      "live_only": false,
+      "title": "LE SOL",
+      "lines": [
+        "LE SOL SE FATIGUE.",
+        "ON LUI EN DEMANDE TROP."
+      ],
+      "info": [
+        "Forcer les champs augmente le blé. Le modèle change le rendement, il n'efface pas les terres d'un coup. Le récit du rapport, lui, dit que le sol part si on lui en demande trop.",
+        "Laisser souffler les champs, c'est moins à manger maintenant."
+      ],
+      "a": {
+        "label": "REPOS",
+        "law": 2,
+        "delta": -1,
+        "sub": "LES CHAMPS SOUFFLENT",
+        "shock": null
+      },
+      "b": {
+        "label": "FORCER",
+        "law": 2,
+        "delta": 1,
+        "sub": "PLUS DE BLÉ, MOINS DE SOL",
+        "shock": null
+      }
+    },
+    {
+      "id": "usure",
+      "year": 2070,
+      "theme": "essor",
+      "live_only": true,
+      "title": "L'USURE",
+      "lines": [
+        "LES USINES TOURNENT ENCORE.",
+        "FILTRER L'AIR, OU ALLER VITE."
+      ],
+      "info": [
+        "Les machines tournent encore. Filtrer l'air baisse la pollution par objet. Aller vite, via l'IA, fait plus d'objets et plus de dégâts.",
+        "Faire durer le capital sans cesser d'en ajouter ne stabilise pas : il faut aussi arrêter d'agrandir le stock."
+      ],
+      "a": {
+        "label": "FILTRER",
+        "law": 3,
+        "delta": 1,
+        "sub": "MOINS DE POISON PAR OBJET",
+        "shock": null
+      },
+      "b": {
+        "label": "VITE",
+        "law": 9,
+        "delta": 1,
+        "sub": "PLUS VITE, PLUS DE DÉGÂTS",
+        "shock": null
+      }
+    },
+    {
+      "id": "heritage",
+      "year": 2080,
+      "theme": "pollution",
+      "live_only": false,
+      "title": "APRÈS NOUS",
+      "lines": [
+        "LES ENFANTS D'AUJOURD'HUI",
+        "VERRONT ENCORE L'AN 2100."
+      ],
+      "info": [
+        "Les enfants nés maintenant verront encore 2100. Moins de pollution par objet leur laisse un air moins lourd. Plus d'enfants maintenant ajoute des bouches avant que l'air ait baissé.",
+        "La pollution déjà émise reste des années. Décider tard n'efface pas le stock."
+      ],
+      "a": {
+        "label": "AIR",
+        "law": 3,
+        "delta": 1,
+        "sub": "MOINS DE POLLUTION POUR EUX",
+        "shock": null
+      },
+      "b": {
+        "label": "ENFANTS",
+        "law": 0,
+        "delta": -1,
+        "sub": "PLUS D'ENFANTS MAINTENANT",
+        "shock": null
+      }
+    },
+    {
+      "id": "soins",
+      "year": 2080,
+      "theme": "essor",
+      "live_only": true,
+      "title": "LES SOINS",
+      "lines": [
+        "LE BLÉ ET LES SOINS,",
+        "OU ENCORE DES USINES."
+      ],
+      "info": [
+        "Partager retire une part des usines neuves pour les soins et la consommation. Le blé n'est pas la variable : on n'enlève pas aux champs.",
+        "Garder pour produire laisse la croissance industrielle suivre son cours."
+      ],
+      "a": {
+        "label": "PARTAGER",
+        "law": 6,
+        "delta": 1,
+        "sub": "MOINS D'USINES NEUVES",
+        "shock": null
+      },
+      "b": {
+        "label": "USINES",
+        "law": 6,
+        "delta": -1,
+        "sub": "ON GARDE POUR PRODUIRE",
+        "shock": null
+      }
+    },
+    {
+      "id": "dernier",
+      "year": 2090,
+      "theme": "metal",
+      "live_only": false,
+      "title": "AVANT LA FIN",
+      "lines": [
+        "DERNIER CONSEIL",
+        "AVANT L'AN 2100."
+      ],
+      "info": [
+        "Dernier conseil avant l'horizon du modèle. Garder le métal fait durer les mines. Le prendre maintenant vide ce qui reste.",
+        "Après ce conseil, les années vont jusqu'à 2100. S'il n'y a plus rien à tenir, le calcul s'arrête."
+      ],
+      "a": {
+        "label": "GARDER",
+        "law": 4,
+        "delta": 1,
+        "sub": "MOINS DE MÉTAL PAR PERSONNE",
+        "shock": null
+      },
+      "b": {
+        "label": "VIDER",
+        "law": 4,
+        "delta": -1,
+        "sub": "ON PREND LE MÉTAL RESTANT",
+        "shock": null
+      }
+    },
+    {
+      "id": "fin",
+      "year": 2090,
+      "theme": "essor",
+      "live_only": true,
+      "title": "LA FIN",
+      "lines": [
+        "IL RESTE PEU D'ANNÉES.",
+        "POLLUER MOINS, OU PRODUIRE ENCORE."
+      ],
+      "info": [
+        "Il reste peu d'années dans le modèle. Moins de pollution par objet, ou encore plus d'objets.",
+        "Un dernier cran ne réécrit pas le siècle. Il change la texture de la fin."
+      ],
+      "a": {
+        "label": "AIR",
+        "law": 3,
+        "delta": 1,
+        "sub": "MOINS DE POLLUTION PAR OBJET",
+        "shock": null
+      },
+      "b": {
+        "label": "PRODUIRE",
+        "law": 9,
+        "delta": 1,
+        "sub": "PLUS D'OBJETS, PLUS DE DÉGÂTS",
+        "shock": null
+      }
+    },
+    {
+      "id": "iss",
+      "year": 2030,
+      "theme": "calme",
+      "live_only": false,
+      "aside": true,
+      "title": "L'ISS",
+      "lines": [
+        "LA STATION TOURNE ENCORE.",
+        "LA GARDER, OU LA LÂCHER."
+      ],
+      "info": [
+        "La station tourne près de la Terre. La garder, elle reste dans le ciel.",
+        "La lâcher, elle rentre et disparaît.",
+        "Le modèle de 1972 ne compte pas une station. Les courbes ne bougent pas."
+      ],
+      "a": {
+        "label": "GARDER",
+        "law": null,
+        "delta": 0,
+        "sub": "ELLE RESTE EN ORBITE",
+        "shock": null
+      },
+      "b": {
+        "label": "LÂCHER",
+        "law": null,
+        "delta": 0,
+        "sub": "ELLE QUITTE LE CIEL",
+        "shock": "iss"
+      }
+    }
+  ],
+  "forks": [
+    {
+      "id": "pollution",
+      "title": "L'AIR",
+      "lines": [
+        "LA POLLUTION ABÎME LES TERRES.",
+        "FILTRER, OU CONTINUER."
+      ],
+      "info": [
+        "La pollution est la limite qui serre. L'air sale abîme les terres dans le rapport : filtrer déplace le problème, continuer le nourrit.",
+        "Le scénario « moins de pollution » du livre recule l'effondrement, puis la faim prend souvent le relais."
+      ],
+      "a": {
+        "label": "FILTRER",
+        "law": 3,
+        "delta": 1,
+        "sub": "MOINS DE POISON PAR OBJET",
+        "shock": null
+      },
+      "b": {
+        "label": "CONTINUER",
+        "law": 9,
+        "delta": 1,
+        "sub": "PLUS D'OBJETS, PLUS D'AIR",
+        "shock": null
+      }
+    },
+    {
+      "id": "essor",
+      "title": "L'ESSOR",
+      "lines": [
+        "LES USINES TOURNENT FORT.",
+        "TENIR CE NIVEAU, OU ACCÉLÉRER."
+      ],
+      "info": [
+        "Les usines tournent fort, le métal et le blé suivent encore. Tenir, c'est moins d'usines neuves et plus pour les soins. Accélérer fait plus d'objets, plus vite.",
+        "L'essor sans frein est le chemin du dépassement : la croissance remplit un monde fini."
+      ],
+      "a": {
+        "label": "TENIR",
+        "law": 6,
+        "delta": 1,
+        "sub": "PLUS POUR LE BLÉ ET LES SOINS",
+        "shock": null
+      },
+      "b": {
+        "label": "PLUS VITE",
+        "law": 7,
+        "delta": 1,
+        "sub": "PLUS D'OBJETS, PLUS VITE",
+        "shock": null
+      }
+    },
+    {
+      "id": "sol",
+      "title": "LE SOL",
+      "lines": [
+        "LE BLÉ MANQUE, PAS LE MÉTAL.",
+        "LE SOL S'USE SI ON FORCE."
+      ],
+      "info": [
+        "Le blé manque, pas le métal. Reposer les champs baisse le rendement. Forcer le monte, et le récit du sol qui part reste le coût.",
+        "Dans le rapport, pousser l'agriculture seule bute ensuite sur le métal ou la pollution."
+      ],
+      "a": {
+        "label": "REPOS",
+        "law": 2,
+        "delta": -1,
+        "sub": "LES CHAMPS SOUFFLENT",
+        "shock": null
+      },
+      "b": {
+        "label": "FORCER",
+        "law": 2,
+        "delta": 1,
+        "sub": "PLUS DE BLÉ, MOINS DE SOL",
+        "shock": null
+      }
+    },
+    {
+      "id": "metal",
+      "title": "LE MÉTAL",
+      "lines": [
+        "LES MINES GUIDENT LA CHUTE.",
+        "EN GARDER, OU CREUSER."
+      ],
+      "info": [
+        "Les mines guident la chute. En garder ralentit la ponction. Creuser vide le stock plus vite et fait repartir les usines, un temps.",
+        "Plus de métal sans les autres leviers : l'effondrement recule, puis revient par l'air."
+      ],
+      "a": {
+        "label": "GARDER",
+        "law": 4,
+        "delta": 1,
+        "sub": "MOINS DE MÉTAL PAR PERSONNE",
+        "shock": null
+      },
+      "b": {
+        "label": "CREUSER",
+        "law": 4,
+        "delta": -1,
+        "sub": "ON VIDE LES MINES PLUS VITE",
+        "shock": null
+      }
+    },
+    {
+      "id": "faim",
+      "title": "LA FAIM",
+      "lines": [
+        "ON MANQUE À MANGER.",
+        "MOINS DE BOUCHES, OU PLUS DE BLÉ."
+      ],
+      "info": [
+        "On manque à manger. Moins de naissances allège plus tard. Plus de blé soulage maintenant et use le rendement.",
+        "La faim du scénario sans décision arrive quand l'industrie a déjà décroché."
+      ],
+      "a": {
+        "label": "ENFANTS",
+        "law": 0,
+        "delta": 1,
+        "sub": "MOINS DE NAISSANCES, PLUS TARD",
+        "shock": null
+      },
+      "b": {
+        "label": "CHAMPS",
+        "law": 2,
+        "delta": 1,
+        "sub": "PLUS DE BLÉ. LE SOL S'USE",
+        "shock": null
+      }
+    }
+  ],
+  "events": [
+    {
+      "id": "iag",
+      "pool": true,
+      "title": "L'IAG",
+      "lines": [
+        "LES MACHINES PENSENT SEULES.",
+        "PLUS D'OBJETS. PLUS DE MÉTAL."
+      ],
+      "effect": "PLUS D'OBJETS, PLUS DE DÉGÂTS",
+      "banner": "L'IAG EST LA",
+      "info": [
+        "Une intelligence artificielle générale fait plus d'objets avec moins de machines. Le jeu lui fait aussi tirer plus de métal et salir plus l'air.",
+        "Ce n'est pas dans World3 de 1972. C'est une croissance plus rapide dans le même monde fini."
+      ],
+      "fx": {
+        "lyf": 1,
+        "ppgf": 1.3,
+        "nruf": 1.42,
+        "alic": 1,
+        "icor": 0.7,
+        "cuf": 1,
+        "dcfs": 1,
+        "mort": 1,
+        "fcaor_add": 0,
+        "pop_keep": 1,
+        "nr_keep": 1,
+        "al_keep": 1,
+        "ic_keep": 1,
+        "ppolx_add": 0,
+        "nri_add": 0,
+        "ramp": 6
+      }
+    },
+    {
+      "id": "fusion",
+      "pool": true,
+      "title": "LA FUSION",
+      "lines": [
+        "LES CENTRALES À FUSION TOURNENT.",
+        "ON USE MOINS DE MÉTAL."
+      ],
+      "effect": "MOINS DE MÉTAL, MOINS D'AIR SALE",
+      "banner": "LA FUSION TOURNE",
+      "info": [
+        "Des centrales à fusion baissent le métal tiré et la pollution par objet. L'énergie abondante ne supprime pas les autres limites : les gens, les champs, le stock de machines.",
+        "Dans le rapport, une technique qui lève une limite en révèle une autre."
+      ],
+      "fx": {
+        "lyf": 1,
+        "ppgf": 0.7,
+        "nruf": 0.55,
+        "alic": 1,
+        "icor": 1,
+        "cuf": 1,
+        "dcfs": 1,
+        "mort": 1,
+        "fcaor_add": 0,
+        "pop_keep": 1,
+        "nr_keep": 1,
+        "al_keep": 1,
+        "ic_keep": 1,
+        "ppolx_add": 0,
+        "nri_add": 0,
+        "ramp": 15
+      }
+    },
+    {
+      "id": "pandemie",
+      "pool": true,
+      "title": "PANDÉMIE",
+      "lines": [
+        "UN MAL NOUVEAU TRAVERSE LES VILLES.",
+        "BEAUCOUP DE GENS MEURENT."
+      ],
+      "effect": "LA POPULATION BAISSE D'UN COUP",
+      "banner": "UNE PANDÉMIE A FRAPPÉ",
+      "info": [
+        "Un mal nouveau tue d'un coup une part de la population. Le modèle baisse le nombre de gens cette année-là, une seule fois.",
+        "Moins de bouches n'est pas une politique. Les naissances d'après, les usines et les champs suivent leur cours."
+      ],
+      "fx": {
+        "lyf": 1,
+        "ppgf": 1,
+        "nruf": 1,
+        "alic": 1,
+        "icor": 1,
+        "cuf": 1,
+        "dcfs": 1,
+        "mort": 1,
+        "fcaor_add": 0,
+        "pop_keep": 0.88,
+        "nr_keep": 1,
+        "al_keep": 1,
+        "ic_keep": 1,
+        "ppolx_add": 0,
+        "nri_add": 0,
+        "ramp": 0
+      }
+    },
+    {
+      "id": "climat",
+      "pool": true,
+      "title": "LE CLIMAT",
+      "lines": [
+        "LES SAISONS CASSENT.",
+        "LES CHAMPS RENDENT MOINS."
+      ],
+      "effect": "MOINS DE BLÉ, DES TERRES PERDUES",
+      "banner": "LE CLIMAT SE DÉCHAÎNE",
+      "info": [
+        "Les saisons cassent. Le rendement des terres baisse, et une part des champs disparaît. World3 ne calcule pas la température : ici, le climat entre par l'agriculture.",
+        "C'est un choc durable. Il s'ajoute aux décisions du conseil."
+      ],
+      "fx": {
+        "lyf": 0.78,
+        "ppgf": 1,
+        "nruf": 1,
+        "alic": 1,
+        "icor": 1,
+        "cuf": 1,
+        "dcfs": 1,
+        "mort": 1,
+        "fcaor_add": 0,
+        "pop_keep": 1,
+        "nr_keep": 1,
+        "al_keep": 0.94,
+        "ic_keep": 1,
+        "ppolx_add": 0,
+        "nri_add": 0,
+        "ramp": 10
+      }
+    },
+    {
+      "id": "guerre",
+      "pool": true,
+      "title": "GRANDE GUERRE",
+      "lines": [
+        "DES ARMÉES SE BATTENT PARTOUT.",
+        "DES USINES BRÛLENT."
+      ],
+      "effect": "MOINS D'USINES, MOINS DE GENS",
+      "banner": "UNE GRANDE GUERRE",
+      "info": [
+        "Une grande guerre détruit des usines et tue. Une part du capital cesse de produire, pour la suite.",
+        "Moins d'objets n'est pas ici un choix de sobriété. C'est une casse."
+      ],
+      "fx": {
+        "lyf": 1,
+        "ppgf": 1,
+        "nruf": 1,
+        "alic": 1,
+        "icor": 1,
+        "cuf": 0.76,
+        "dcfs": 1,
+        "mort": 1,
+        "fcaor_add": 0,
+        "pop_keep": 0.95,
+        "nr_keep": 1,
+        "al_keep": 1,
+        "ic_keep": 0.86,
+        "ppolx_add": 0,
+        "nri_add": 0,
+        "ramp": 0
+      }
+    },
+    {
+      "id": "paix",
+      "pool": true,
+      "title": "LA PAIX",
+      "lines": [
+        "LES CANONS SE TAISENT.",
+        "ON REFAIT DURER LES MACHINES."
+      ],
+      "effect": "LES USINES REPRENNENT",
+      "banner": "UN TRAITÉ DE PAIX",
+      "info": [
+        "Les canons se taisent. Les machines durent plus longtemps, et davantage d'usines se remettent au travail.",
+        "La paix rend du capital. Elle ne décide pas à quoi il sert."
+      ],
+      "fx": {
+        "lyf": 1,
+        "ppgf": 1,
+        "nruf": 1,
+        "alic": 1.15,
+        "icor": 1,
+        "cuf": 1.22,
+        "dcfs": 1,
+        "mort": 1,
+        "fcaor_add": 0,
+        "pop_keep": 1,
+        "nr_keep": 1,
+        "al_keep": 1,
+        "ic_keep": 1,
+        "ppolx_add": 0,
+        "nri_add": 0,
+        "ramp": 3
+      }
+    },
+    {
+      "id": "secheresse",
+      "pool": true,
+      "title": "SÉCHERESSE",
+      "lines": [
+        "LA PLUIE MANQUE PLUSIEURS ANNÉES.",
+        "LE BLÉ BAISSE."
+      ],
+      "effect": "MOINS À MANGER",
+      "banner": "UNE GRANDE SÉCHERESSE",
+      "info": [
+        "Plusieurs années sans assez de pluie. Chaque champ produit moins, durablement.",
+        "Le blé baisse sans qu'on ait forcé le sol. La faim peut suivre si les stocks ne compensent pas."
+      ],
+      "fx": {
+        "lyf": 0.82,
+        "ppgf": 1,
+        "nruf": 1,
+        "alic": 1,
+        "icor": 1,
+        "cuf": 1,
+        "dcfs": 1,
+        "mort": 1,
+        "fcaor_add": 0,
+        "pop_keep": 1,
+        "nr_keep": 1,
+        "al_keep": 1,
+        "ic_keep": 1,
+        "ppolx_add": 0,
+        "nri_add": 0,
+        "ramp": 0
+      }
+    },
+    {
+      "id": "gisement",
+      "pool": true,
+      "title": "GISEMENT",
+      "lines": [
+        "ON TROUVE UN GRAND FILON.",
+        "LES MINES OUVRENT EN DIX ANS."
+      ],
+      "effect": "UN PEU PLUS DE MÉTAL, PEU À PEU",
+      "banner": "UN GISEMENT EST OUVERT",
+      "info": [
+        "On trouve un gisement. Le stock exploitable augmente d'environ 8 % du stock d'origine, étalé sur dix ans : le temps d'ouvrir les mines. Les usines tiennent un peu mieux, l'air avec.",
+        "Ce n'est pas une politique de deep-mining : c'est une découverte. Un seul filon ne refait pas le monde : le rapport doublait le stock entier pour reculer la chute."
+      ],
+      "fx": {
+        "lyf": 1,
+        "ppgf": 1,
+        "nruf": 1,
+        "alic": 1,
+        "icor": 1,
+        "cuf": 1,
+        "dcfs": 1,
+        "mort": 1,
+        "fcaor_add": 0,
+        "pop_keep": 1,
+        "nr_keep": 1,
+        "al_keep": 1,
+        "ic_keep": 1,
+        "ppolx_add": 0,
+        "nri_add": 0.08,
+        "ramp": 10
+      }
+    },
+    {
+      "id": "filon",
+      "pool": true,
+      "title": "FILON MORT",
+      "lines": [
+        "UNE GRANDE MINE SE FERME.",
+        "LE MÉTAL RESTANT BAISSE."
+      ],
+      "effect": "MOINS DE MÉTAL D'UN COUP",
+      "banner": "UN GRAND FILON EST VIDE",
+      "info": [
+        "Une grande mine ferme. Le métal restant baisse d'un coup, une seule fois.",
+        "Le conseil n'a pas choisi de creuser. Le monde retire du stock."
+      ],
+      "fx": {
+        "lyf": 1,
+        "ppgf": 1,
+        "nruf": 1,
+        "alic": 1,
+        "icor": 1,
+        "cuf": 1,
+        "dcfs": 1,
+        "mort": 1,
+        "fcaor_add": 0,
+        "pop_keep": 1,
+        "nr_keep": 0.8,
+        "al_keep": 1,
+        "ic_keep": 1,
+        "ppolx_add": 0,
+        "nri_add": 0,
+        "ramp": 0
+      }
+    },
+    {
+      "id": "accord",
+      "pool": true,
+      "title": "L'ACCORD",
+      "lines": [
+        "LES PAYS S'ENTENDENT.",
+        "CHAQUE OBJET SALIT MOINS."
+      ],
+      "effect": "MOINS DE POLLUTION",
+      "banner": "UN ACCORD SUR L'AIR",
+      "info": [
+        "Les pays s'entendent. Chaque objet salit moins, pour la suite.",
+        "Un accord baisse la pollution nouvelle. Il n'efface pas l'air déjà sale, qui reste des années."
+      ],
+      "fx": {
+        "lyf": 1,
+        "ppgf": 0.64,
+        "nruf": 1,
+        "alic": 1,
+        "icor": 1,
+        "cuf": 1,
+        "dcfs": 1,
+        "mort": 1,
+        "fcaor_add": 0,
+        "pop_keep": 1,
+        "nr_keep": 1,
+        "al_keep": 1,
+        "ic_keep": 1,
+        "ppolx_add": 0,
+        "nri_add": 0,
+        "ramp": 8
+      }
+    },
+    {
+      "id": "accident",
+      "pool": true,
+      "title": "L'ACCIDENT",
+      "lines": [
+        "UNE USINE LÂCHE UN POISON.",
+        "L'AIR RESTE SALE LONGTEMPS."
+      ],
+      "effect": "UN PIC DE POLLUTION",
+      "banner": "UN ACCIDENT INDUSTRIEL",
+      "info": [
+        "Une usine lâche un poison. La pollution fait un pic, et chaque objet salit un peu plus ensuite.",
+        "L'accident s'ajoute. Il ne remplace pas la pollution de fond."
+      ],
+      "fx": {
+        "lyf": 1,
+        "ppgf": 1.15,
+        "nruf": 1,
+        "alic": 1,
+        "icor": 1,
+        "cuf": 1,
+        "dcfs": 1,
+        "mort": 1,
+        "fcaor_add": 0,
+        "pop_keep": 1,
+        "nr_keep": 1,
+        "al_keep": 1,
+        "ic_keep": 1,
+        "ppolx_add": 1.5,
+        "nri_add": 0,
+        "ramp": 0
+      }
+    },
+    {
+      "id": "ecoles",
+      "pool": true,
+      "title": "LES ÉCOLES",
+      "lines": [
+        "PRESQUE TOUS LES ENFANTS",
+        "VONT MAINTENANT À L'ÉCOLE."
+      ],
+      "effect": "MOINS D'ENFANTS, PLUS TARD",
+      "banner": "L'ÉCOLE POUR TOUS",
+      "info": [
+        "Presque tous les enfants vont à l'école. Le souhait d'enfants baisse, pour la suite.",
+        "Dans le modèle, l'instruction agit sur les naissances avec retard, et surtout si le reste suit."
+      ],
+      "fx": {
+        "lyf": 1,
+        "ppgf": 1,
+        "nruf": 1,
+        "alic": 1,
+        "icor": 1,
+        "cuf": 1,
+        "dcfs": 0.84,
+        "mort": 1,
+        "fcaor_add": 0,
+        "pop_keep": 1,
+        "nr_keep": 1,
+        "al_keep": 1,
+        "ic_keep": 1,
+        "ppolx_add": 0,
+        "nri_add": 0,
+        "ramp": 10
+      }
+    },
+    {
+      "id": "baby",
+      "pool": true,
+      "title": "BABY-BOOM",
+      "lines": [
+        "ON VEUT DE NOUVEAU",
+        "BEAUCOUP D'ENFANTS."
+      ],
+      "effect": "PLUS DE NAISSANCES",
+      "banner": "UN BABY-BOOM",
+      "info": [
+        "On veut de nouveau beaucoup d'enfants. La norme monte, pour la suite.",
+        "Plus de naissances aujourd'hui, c'est plus de gens dans vingt ans, quand les autres limites serrent peut-être déjà."
+      ],
+      "fx": {
+        "lyf": 1,
+        "ppgf": 1,
+        "nruf": 1,
+        "alic": 1,
+        "icor": 1,
+        "cuf": 1,
+        "dcfs": 1.16,
+        "mort": 1,
+        "fcaor_add": 0,
+        "pop_keep": 1,
+        "nr_keep": 1,
+        "al_keep": 1,
+        "ic_keep": 1,
+        "ppolx_add": 0,
+        "nri_add": 0,
+        "ramp": 5
+      }
+    },
+    {
+      "id": "medecine",
+      "pool": true,
+      "title": "MÉDECINE",
+      "lines": [
+        "ON MEURT MOINS TÔT.",
+        "LES VIEUX RESTENT PLUS."
+      ],
+      "effect": "MOINS DE MORTS",
+      "banner": "UNE MÉDECINE NOUVELLE",
+      "info": [
+        "On meurt moins tôt. La mortalité baisse, durablement. Les gens restent plus nombreux.",
+        "Vivre plus longtemps est un bien. Dans un monde fini, c'est aussi plus de bouches et plus de temps d'usage."
+      ],
+      "fx": {
+        "lyf": 1,
+        "ppgf": 1,
+        "nruf": 1,
+        "alic": 1,
+        "icor": 1,
+        "cuf": 1,
+        "dcfs": 1,
+        "mort": 0.75,
+        "fcaor_add": 0,
+        "pop_keep": 1,
+        "nr_keep": 1,
+        "al_keep": 1,
+        "ic_keep": 1,
+        "ppolx_add": 0,
+        "nri_add": 0,
+        "ramp": 8
+      }
+    },
+    {
+      "id": "insectes",
+      "pool": true,
+      "title": "INSECTES",
+      "lines": [
+        "MOINS DE POLLINISATEURS.",
+        "LES CHAMPS RENDENT MOINS."
+      ],
+      "effect": "MOINS DE BLÉ",
+      "banner": "LES INSECTES MANQUENT",
+      "info": [
+        "Moins de pollinisateurs. Les champs rendent moins, durablement.",
+        "Le blé dépend d'un vivant que le modèle de 1972 ne dessinait pas. Ici, il entre comme une baisse de rendement."
+      ],
+      "fx": {
+        "lyf": 0.8,
+        "ppgf": 1,
+        "nruf": 1,
+        "alic": 1,
+        "icor": 1,
+        "cuf": 1,
+        "dcfs": 1,
+        "mort": 1,
+        "fcaor_add": 0,
+        "pop_keep": 1,
+        "nr_keep": 1,
+        "al_keep": 1,
+        "ic_keep": 1,
+        "ppolx_add": 0,
+        "nri_add": 0,
+        "ramp": 8
+      }
+    },
+    {
+      "id": "circulaire",
+      "pool": true,
+      "title": "RECYCLAGE",
+      "lines": [
+        "ON REFAIT LES OBJETS",
+        "AVEC L'ANCIEN MÉTAL."
+      ],
+      "effect": "ON TIRE MOINS DE MÉTAL",
+      "banner": "ON RECYCLE LE MÉTAL",
+      "info": [
+        "On refait les objets avec l'ancien métal. On tire moins par personne, pour la suite.",
+        "Recycler ralentit les mines. Ça ne crée pas de métal neuf, et ça ne baisse pas à soi seul la pollution."
+      ],
+      "fx": {
+        "lyf": 1,
+        "ppgf": 1,
+        "nruf": 0.66,
+        "alic": 1,
+        "icor": 1,
+        "cuf": 1,
+        "dcfs": 1,
+        "mort": 1,
+        "fcaor_add": 0,
+        "pop_keep": 1,
+        "nr_keep": 1,
+        "al_keep": 1,
+        "ic_keep": 1,
+        "ppolx_add": 0,
+        "nri_add": 0,
+        "ramp": 10
+      }
+    },
+    {
+      "id": "krach",
+      "pool": true,
+      "title": "LE KRACH",
+      "lines": [
+        "L'ARGENT SE FIGE.",
+        "DES USINES S'ARRÊTENT."
+      ],
+      "effect": "MOINS D'OBJETS FAITS",
+      "banner": "UNE CRISE DES USINES",
+      "info": [
+        "L'argent se fige. Une part des usines s'arrête, et il faut plus de machines pour le même objet.",
+        "Moins d'objets, ici, vient d'une crise, pas d'une orientation choisie."
+      ],
+      "fx": {
+        "lyf": 1,
+        "ppgf": 1,
+        "nruf": 1,
+        "alic": 1,
+        "icor": 1.16,
+        "cuf": 0.76,
+        "dcfs": 1,
+        "mort": 1,
+        "fcaor_add": 0,
+        "pop_keep": 1,
+        "nr_keep": 1,
+        "al_keep": 1,
+        "ic_keep": 1,
+        "ppolx_add": 0,
+        "nri_add": 0,
+        "ramp": 0
+      }
+    },
+    {
+      "id": "barrages",
+      "pool": true,
+      "title": "BARRAGES",
+      "lines": [
+        "L'EAU ARRIVE AUX CHAMPS SECS.",
+        "CHAQUE CHAMP PRODUIT PLUS."
+      ],
+      "effect": "PLUS DE BLÉ",
+      "banner": "DE GRANDS BARRAGES",
+      "info": [
+        "L'eau arrive aux champs secs. Chaque champ produit plus, durablement.",
+        "Plus de blé soulage. Si le reste grandit, le métal et l'air reprennent la main."
+      ],
+      "fx": {
+        "lyf": 1.18,
+        "ppgf": 1,
+        "nruf": 1,
+        "alic": 1,
+        "icor": 1,
+        "cuf": 1,
+        "dcfs": 1,
+        "mort": 1,
+        "fcaor_add": 0,
+        "pop_keep": 1,
+        "nr_keep": 1,
+        "al_keep": 1,
+        "ic_keep": 1,
+        "ppolx_add": 0,
+        "nri_add": 0,
+        "ramp": 8
+      }
+    },
+    {
+      "id": "charbon",
+      "pool": true,
+      "title": "CHARBON",
+      "lines": [
+        "LE CHARBON REDEVIENT PAS CHER.",
+        "L'AIR SE SALIT DAVANTAGE."
+      ],
+      "effect": "PLUS D'OBJETS, PLUS D'AIR SALE",
+      "banner": "LE CHARBON REVIENT",
+      "info": [
+        "Le charbon redevient pas cher. On fait plus d'objets, et chaque objet salit davantage.",
+        "Une énergie sale lève un frein et charge l'air. Le rapport connaît ce déplacement."
+      ],
+      "fx": {
+        "lyf": 1,
+        "ppgf": 1.4,
+        "nruf": 1,
+        "alic": 1,
+        "icor": 0.88,
+        "cuf": 1,
+        "dcfs": 1,
+        "mort": 1,
+        "fcaor_add": 0,
+        "pop_keep": 1,
+        "nr_keep": 1,
+        "al_keep": 1,
+        "ic_keep": 1,
+        "ppolx_add": 0,
+        "nri_add": 0,
+        "ramp": 5
+      }
+    },
+    {
+      "id": "batteries",
+      "pool": true,
+      "title": "BATTERIES",
+      "lines": [
+        "ON STOCKE LE COURANT.",
+        "L'ÉNERGIE USE MOINS DE MÉTAL."
+      ],
+      "effect": "MOINS DE MINES, AIR PLUS CLAIR",
+      "banner": "DES BATTERIES PARTOUT",
+      "info": [
+        "On stocke le courant. On tire moins de métal, et chaque objet salit moins.",
+        "Les batteries déplacent une limite. Elles en utilisent d'autres : métaux, usines, recyclage."
+      ],
+      "fx": {
+        "lyf": 1,
+        "ppgf": 0.8,
+        "nruf": 0.78,
+        "alic": 1,
+        "icor": 1,
+        "cuf": 1,
+        "dcfs": 1,
+        "mort": 1,
+        "fcaor_add": 0,
+        "pop_keep": 1,
+        "nr_keep": 1,
+        "al_keep": 1,
+        "ic_keep": 1,
+        "ppolx_add": 0,
+        "nri_add": 0,
+        "ramp": 10
+      }
+    },
+    {
+      "id": "erosion",
+      "pool": true,
+      "title": "L'ÉROSION",
+      "lines": [
+        "L'EAU EMPORTE LA TERRE.",
+        "DES CHAMPS DISPARAISSENT."
+      ],
+      "effect": "MOINS DE TERRES ET DE BLÉ",
+      "banner": "LE SOL PART",
+      "info": [
+        "L'eau emporte la terre. Une part des champs disparaît, et le rendement baisse.",
+        "Le sol part pour de bon, pas seulement dans le récit. Moins de terres, moins de blé."
+      ],
+      "fx": {
+        "lyf": 0.88,
+        "ppgf": 1,
+        "nruf": 1,
+        "alic": 1,
+        "icor": 1,
+        "cuf": 1,
+        "dcfs": 1,
+        "mort": 1,
+        "fcaor_add": 0,
+        "pop_keep": 1,
+        "nr_keep": 1,
+        "al_keep": 0.91,
+        "ic_keep": 1,
+        "ppolx_add": 0,
+        "nri_add": 0,
+        "ramp": 0
+      }
+    },
+    {
+      "id": "vaccin",
+      "pool": true,
+      "title": "LE VACCIN",
+      "lines": [
+        "UN VACCIN ARRÊTE DES MAUX.",
+        "ON MEURT MOINS."
+      ],
+      "effect": "MOINS DE MORTS",
+      "banner": "UN VACCIN UNIVERSEL",
+      "info": [
+        "Un vaccin arrête des maux. On meurt moins, durablement.",
+        "Comme la médecine : plus de vies, et un monde un peu plus peuplé."
+      ],
+      "fx": {
+        "lyf": 1,
+        "ppgf": 1,
+        "nruf": 1,
+        "alic": 1,
+        "icor": 1,
+        "cuf": 1,
+        "dcfs": 1,
+        "mort": 0.84,
+        "fcaor_add": 0,
+        "pop_keep": 1,
+        "nr_keep": 1,
+        "al_keep": 1,
+        "ic_keep": 1,
+        "ppolx_add": 0,
+        "nri_add": 0,
+        "ramp": 3
+      }
+    },
+    {
+      "id": "spatial",
+      "pool": true,
+      "title": "MINES LOINTAINES",
+      "lines": [
+        "ON RAPPORTE DU MÉTAL.",
+        "LES MINES D'ICI SOUFFLENT."
+      ],
+      "effect": "ON TIRE MOINS ICI",
+      "banner": "DU MÉTAL VENU D'AILLEURS",
+      "info": [
+        "On rapporte du métal d'ailleurs. Les mines d'ici sont moins sollicitées.",
+        "Le stock terrestre dure plus. L'industrie, elle, peut continuer. L'air ne baisse pas tout seul."
+      ],
+      "fx": {
+        "lyf": 1,
+        "ppgf": 1,
+        "nruf": 0.7,
+        "alic": 1,
+        "icor": 1,
+        "cuf": 1,
+        "dcfs": 1,
+        "mort": 1,
+        "fcaor_add": 0,
+        "pop_keep": 1,
+        "nr_keep": 1,
+        "al_keep": 1,
+        "ic_keep": 1,
+        "ppolx_add": 0,
+        "nri_add": 0,
+        "ramp": 10
+      }
+    },
+    {
+      "id": "jetable",
+      "pool": true,
+      "title": "JETABLE",
+      "lines": [
+        "LES OBJETS CASSENT PLUS VITE.",
+        "IL EN FAUT SANS CESSE."
+      ],
+      "effect": "LES MACHINES DURENT MOINS",
+      "banner": "TOUT SE JETTE",
+      "info": [
+        "Les objets cassent plus vite. Les machines durent moins, il en faut sans cesse.",
+        "C'est l'inverse de l'orientation Usines : le capital se remplace au lieu de tenir."
+      ],
+      "fx": {
+        "lyf": 1,
+        "ppgf": 1,
+        "nruf": 1,
+        "alic": 0.74,
+        "icor": 1,
+        "cuf": 1,
+        "dcfs": 1,
+        "mort": 1,
+        "fcaor_add": 0,
+        "pop_keep": 1,
+        "nr_keep": 1,
+        "al_keep": 1,
+        "ic_keep": 1,
+        "ppolx_add": 0,
+        "nri_add": 0,
+        "ramp": 6
+      }
+    },
+    {
+      "id": "iss",
+      "pool": false,
+      "title": "L'ISS",
+      "lines": [
+        "LA STATION QUITTE L'ORBITE.",
+        "ELLE RETOMBE."
+      ],
+      "effect": "ELLE N'EST PLUS LÀ",
+      "banner": "L'ISS A QUITTÉ LE CIEL",
+      "info": [
+        "La station quitte l'orbite. Elle n'est plus au-dessus de la Terre.",
+        "Les gens, le blé, le métal, l'air et les usines ne changent pas."
+      ],
+      "fx": {
+        "lyf": 1,
+        "ppgf": 1,
+        "nruf": 1,
+        "alic": 1,
+        "icor": 1,
+        "cuf": 1,
+        "dcfs": 1,
+        "mort": 1,
+        "fcaor_add": 0,
+        "pop_keep": 1,
+        "nr_keep": 1,
+        "al_keep": 1,
+        "ic_keep": 1,
+        "ppolx_add": 0,
+        "nri_add": 0,
+        "ramp": 0
+      }
+    },
+    {
+      "id": "filons",
+      "pool": false,
+      "title": "DEEP-MINING",
+      "lines": [
+        "ON DÉVELOPPE LE DEEP-MINING.",
+        "LES USINES TIENNENT. ELLES CREUSENT."
+      ],
+      "effect": "PLUS DE MÉTAL EN QUINZE ANS. ÇA COÛTE",
+      "banner": "LE DEEP-MINING S'OUVRE",
+      "info": [
+        "Développement du deep-mining : extraction très profonde, terrestre ou sous-marine.",
+        "Sur quinze ans, le stock exploitable augmente d'un cinquième du stock d'origine. Rien l'année même : il faut construire. Et creuser si profond coûte : 8 % du capital industriel part à l'extraction au lieu de faire des objets.",
+        "Les usines tiennent plus longtemps, sans repartir. Dans le rapport, « plus de ressources » recule l'effondrement, puis la pollution abîme les terres. Le deep-mining déplace la limite. Il ne l'enlève pas."
+      ],
+      "fx": {
+        "lyf": 1,
+        "ppgf": 1,
+        "nruf": 1,
+        "alic": 1,
+        "icor": 1,
+        "cuf": 1,
+        "dcfs": 1,
+        "mort": 1,
+        "fcaor_add": 0.08,
+        "pop_keep": 1,
+        "nr_keep": 1,
+        "al_keep": 1,
+        "ic_keep": 1,
+        "ppolx_add": 0,
+        "nri_add": 0.2,
+        "ramp": 15
+      }
+    }
+  ]
+}

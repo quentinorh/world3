@@ -1,0 +1,11 @@
+__pycache__/
+*.pyc
+save.json
+shots/
+.venv/
+deploy/target.ps1
+pace.log
+var/
+AGENTS.md
+.cursor/
+.world3-revision
